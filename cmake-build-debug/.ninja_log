@@ -1,0 +1,14 @@
+# ninja log v5
+2	1025	6743272795176973	CMakeFiles/parser.dir/main.cpp.obj	954da289c673a71f
+2	502	6743171002360951	CMakeFiles/parser.dir/lexer.cpp.obj	bffa8021b4a374a
+1176	1420	6743278605536546	parser.exe	1fba9ec3054a7c3
+44	708	6743147313409945	CMakeFiles/parser.dir/token/token.cpp.obj	972bd29d4eb6f583
+28	728	6743147313644198	CMakeFiles/parser.dir/reminder/reminder.cpp.obj	21dff9f51b918d42
+6	1204	6743147318374101	CMakeFiles/parser.dir/parser/parser.cpp.obj	71d0569a66e6d2c1
+22	739	6743147313702760	CMakeFiles/parser.dir/file_reader/file_reader.cpp.obj	aeb8ce25c618346a
+13	798	6743147314337198	CMakeFiles/parser.dir/lexer/lexer.cpp.obj	afd861c1553fee42
+1	225	6743767014411582	build.ninja	5250733a8c297d98
+17	513	6743151726344982	CMakeFiles/parser.dir/token.cpp.obj	42f05f02b09b99e
+27	533	6743151726560246	CMakeFiles/parser.dir/reminder.cpp.obj	20a36e49b9a6eee0
+2	513	6743159605874301	CMakeFiles/parser.dir/file_reader.cpp.obj	1cfb7c99c7273011
+2	1175	6743278603291210	CMakeFiles/parser.dir/parser.cpp.obj	41d04e6d9f5d201a
