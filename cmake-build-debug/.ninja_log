@@ -12,3 +12,16 @@
 27	533	6743151726560246	CMakeFiles/parser.dir/reminder.cpp.obj	20a36e49b9a6eee0
 2	513	6743159605874301	CMakeFiles/parser.dir/file_reader.cpp.obj	1cfb7c99c7273011
 2	1175	6743278603291210	CMakeFiles/parser.dir/parser.cpp.obj	41d04e6d9f5d201a
+32	2181	6744931558446142	CMakeFiles/parser.dir/reminder.cpp.obj	20a36e49b9a6eee0
+15	2182	6744931558455890	CMakeFiles/parser.dir/file_reader.cpp.obj	1cfb7c99c7273011
+10	2187	6744931558504692	CMakeFiles/parser.dir/token.cpp.obj	42f05f02b09b99e
+21	2202	6744931558660855	CMakeFiles/parser.dir/lexer.cpp.obj	bffa8021b4a374a
+27	2282	6744931559456662	CMakeFiles/parser.dir/parser.cpp.obj	41d04e6d9f5d201a
+2	2390	6744931560530261	CMakeFiles/parser.dir/main.cpp.obj	954da289c673a71f
+2391	3041	6744931567027713	parser.exe	1fba9ec3054a7c3
+2	937	6744931822995410	CMakeFiles/parser.dir/main.cpp.obj	954da289c673a71f
+937	1087	6744931824488688	parser.exe	1fba9ec3054a7c3
+2	1388	6744939946860649	CMakeFiles/parser.dir/parser.cpp.obj	41d04e6d9f5d201a
+1389	1799	6744939951077566	parser.exe	1fba9ec3054a7c3
+2	1041	6744942544179763	CMakeFiles/parser.dir/parser.cpp.obj	41d04e6d9f5d201a
+1042	1373	6744942547457279	parser.exe	1fba9ec3054a7c3

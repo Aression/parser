@@ -21,9 +21,14 @@ bool cmp_str_i(string a, string b) {
 
 Token &lexer::get_token(){
     static char last_char = ' ';
-
     while(isspace(last_char)){
         getnext;
+    }
+
+    // 如果遇到文件的末尾 或者已经停止获取了
+    if (last_char == EOF || !normal) {
+        token = Token(TokenType::EOFTOK, "");
+        return token;
     }
 
     if(last_char == '_'){
@@ -65,7 +70,16 @@ Token &lexer::get_token(){
         } else if (cmp_str_i(ident,"do")) {
             token = Token(TokenType::DOTK, ident);
             return token;
-        } else if (cmp_str_i(ident,"while")) {
+        } else if (cmp_str_i(ident,"switch")){
+            token = Token(TokenType::SWITCHTK, ident);
+            return token;
+        } else if (cmp_str_i(ident,"case")){
+            token = Token(TokenType::CASETK, ident);
+            return token;
+        } else if (cmp_str_i(ident,"default")){
+            token = Token(TokenType::DEFAULTTK, ident);
+            return token;
+        }else if (cmp_str_i(ident,"while")) {
             token = Token(TokenType::WHILETK, ident);
             return token;
         } else if (cmp_str_i(ident,"for")) {
@@ -183,7 +197,11 @@ Token &lexer::get_token(){
             token = Token(TokenType::UNREGONIZED, "!");
             return token;
         }
-    } else if (last_char == ';') {
+    }else if (last_char == ':') {
+        getnext;
+        token = Token(TokenType::COLON, ":");
+        return token;
+    }else if (last_char == ';') {
         getnext;
         token = Token(TokenType::SEMICN, ";");
         return token;
@@ -216,14 +234,21 @@ Token &lexer::get_token(){
         token = Token(TokenType::RBRACE, "}");
         return token;
     }
-    // 如果遇到文件的末尾
-    if (last_char == EOF) {
-        token = Token(TokenType::EOFTOK, "");
-        return token;
-    }
+
+    string unrecognized = "X";
+    unrecognized[0]=last_char;
+    token = Token(TokenType::UNREGONIZED, unrecognized);
+    err("Unrecognized char: ["+unrecognized+"]");
+
     getnext;
-
-    token = Token(TokenType::UNREGONIZED, "");
     return token;
+}
 
+void lexer::err(const string& msg) {
+    reminder->logerr(reader,msg);
+    normal=0;
+}
+
+void lexer::warn(const string& msg) {
+    reminder->logwarn(reader,msg);
 }

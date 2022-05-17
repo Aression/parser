@@ -24,13 +24,21 @@ private:
     string ident;
     FileReader *reader;
     Reminder *reminder;
+    int normal;
 public:
     explicit lexer(FileReader *reader, ostream &err):reader(reader){
         reminder = new Reminder(err);
+        normal=1;
     }
 
     // get next token.
     Token &get_token();
+
+    // record error
+    void err(const string& msg);
+
+    // record warn
+    void warn(const string& msg);
 };
 
 #endif //PARSER_LEXER_H
