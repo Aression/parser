@@ -1,8 +1,8 @@
-# Install script for directory: E:/Workplace2/parser
+# Install script for directory: D:/CPPWorkDIR/parser
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/parser")
+  set(CMAKE_INSTALL_PREFIX "D:/Program Files (x86)/parser")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "E:/Workplace2/parser/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/CPPWorkDIR/parser/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

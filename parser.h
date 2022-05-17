@@ -20,6 +20,7 @@ private:
     ofstream &out;
 
     vector<Token> tokList;
+
     int tokNum;
     int curIndex;
 
@@ -28,6 +29,8 @@ private:
 
     // Look back at a few tokens
     Token &seekN(int index);
+
+    void err(string msg, int errCode);
 public:
     parser(lexer &lex, ofstream &out);
 
@@ -182,7 +185,16 @@ public:
      */
     void parseFactor();
 
-    void parseInsideConst(int consttype);
+
+    void parseState();
+
+    void parseConditionTable();
+
+    void parseDefault();
+
+    void parseSubConditionPhase();
+
+    void parseConstVal();
 };
 
 #endif //PARSER_PARSER_H

@@ -29,6 +29,12 @@ std::string Token::get_type() {
         return "ELSETK";
     else if (type == TokenType::DOTK)
         return "DOTK";
+    else if (type == TokenType::SWITCHTK)
+        return "SWITCHTK";
+    else if (type == TokenType::CASETK)
+        return "CASETK";
+    else if (type == TokenType::DEFAULTTK)
+        return "DEFAULTTK";
     else if (type == TokenType::WHILETK)
         return "WHILETK";
     else if (type == TokenType::FORTK)
@@ -59,7 +65,9 @@ std::string Token::get_type() {
         return "EQL";
     else if (type == TokenType::NEQ)
         return "NEQ";
-    else if (type == TokenType::ASSIGN)
+    else if (type == TokenType::COLON){
+        return "COLON";
+    }else if (type == TokenType::ASSIGN)
         return "ASSIGN";
     else if (type == TokenType::SEMICN)
         return "SEMICN";

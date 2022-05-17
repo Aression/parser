@@ -20,7 +20,6 @@ FileReader::FileReader(const std::string &path) {
         ifstream.close();
         content = std::string(buffer.str());
         content_length = content.size();
-        //std::cout << "content_length: " << content_length << std::endl;
     } else {
         std::cerr << "Cannot open file" << std::endl;
         exit(-1);

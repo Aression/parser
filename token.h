@@ -14,6 +14,7 @@ enum TokenType {
     INTCON,// 整数
     CHARCON,// 字符
     STRCON,// 字符串
+
     CONSTTK,// const
     INTTK,// int
     CHARTK,// char
@@ -22,11 +23,17 @@ enum TokenType {
     IFTK,// if
     ELSETK,// else
     DOTK,// do
+
+    SWITCHTK,// switch
+    CASETK,//case
+    DEFAULTTK,//default
+
     WHILETK,// while
     FORTK,// for
     SCANFTK,// scanf
     PRINTFTK,// printf
     RETURNTK,// return
+
     PLUS,// +
     MINU,// -
     MULT,// *
@@ -37,6 +44,7 @@ enum TokenType {
     GEQ,// >=
     EQL,// ==
     NEQ,// !=
+    COLON,//:
     ASSIGN,// =
     SEMICN,// ;
     COMMA,// ,

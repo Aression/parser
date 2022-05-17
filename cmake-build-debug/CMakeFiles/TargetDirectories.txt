@@ -1,3 +1,3 @@
-E:/Workplace2/parser/cmake-build-debug/CMakeFiles/parser.dir
-E:/Workplace2/parser/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/Workplace2/parser/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir
+D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/rebuild_cache.dir
