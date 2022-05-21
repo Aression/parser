@@ -6,6 +6,7 @@
 
 // unrecognized token
 static Token token(TokenType::UNREGONIZED, "");
+static Token unrecognized(TokenType::UNREGONIZED, "");
 
 string strToLower(const string& strA) {
     string strTmp = strA;
@@ -17,6 +18,12 @@ bool cmp_str_i(string a, string b) {
     string str1 = strToLower(a);
     string str2 = strToLower(b);
     return (str1 == str2);
+}
+
+string lexerErrorReport(int errcode){
+    /*
+     *
+     * */
 }
 
 Token &lexer::get_token(){
@@ -235,10 +242,13 @@ Token &lexer::get_token(){
         return token;
     }
 
-    string unrecognized = "X";
-    unrecognized[0]=last_char;
-    token = Token(TokenType::UNREGONIZED, unrecognized);
-    err("Unrecognized char: ["+unrecognized+"]");
+    //    string unrecognized = "X";
+    //    unrecognized[0]=last_char;
+    //    token = Token(TokenType::UNREGONIZED, unrecognized);
+    //    err("Unrecognized char: ["+unrecognized+"]");
+
+    token = unrecognized;
+    err("Unrecognized char");
 
     getnext;
     return token;

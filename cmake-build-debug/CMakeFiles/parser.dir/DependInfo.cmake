@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "D:/CPPWorkDIR/parser/main.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/main.cpp.obj"
   "D:/CPPWorkDIR/parser/parser.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/parser.cpp.obj"
   "D:/CPPWorkDIR/parser/reminder.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/reminder.cpp.obj"
+  "D:/CPPWorkDIR/parser/symbol_table.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/symbol_table.cpp.obj"
   "D:/CPPWorkDIR/parser/token.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/token.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

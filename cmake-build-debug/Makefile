@@ -276,6 +276,33 @@ reminder.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\parser.dir\build.make CMakeFiles/parser.dir/reminder.cpp.s
 .PHONY : reminder.cpp.s
 
+symbol_table.obj: symbol_table.cpp.obj
+
+.PHONY : symbol_table.obj
+
+# target to build an object file
+symbol_table.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\parser.dir\build.make CMakeFiles/parser.dir/symbol_table.cpp.obj
+.PHONY : symbol_table.cpp.obj
+
+symbol_table.i: symbol_table.cpp.i
+
+.PHONY : symbol_table.i
+
+# target to preprocess a source file
+symbol_table.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\parser.dir\build.make CMakeFiles/parser.dir/symbol_table.cpp.i
+.PHONY : symbol_table.cpp.i
+
+symbol_table.s: symbol_table.cpp.s
+
+.PHONY : symbol_table.s
+
+# target to generate assembly for a file
+symbol_table.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\parser.dir\build.make CMakeFiles/parser.dir/symbol_table.cpp.s
+.PHONY : symbol_table.cpp.s
+
 token.obj: token.cpp.obj
 
 .PHONY : token.obj
@@ -327,6 +354,9 @@ help:
 	@echo ... reminder.obj
 	@echo ... reminder.i
 	@echo ... reminder.s
+	@echo ... symbol_table.obj
+	@echo ... symbol_table.i
+	@echo ... symbol_table.s
 	@echo ... token.obj
 	@echo ... token.i
 	@echo ... token.s

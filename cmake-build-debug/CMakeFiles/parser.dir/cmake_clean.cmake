@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/parser.dir/main.cpp.obj"
   "CMakeFiles/parser.dir/parser.cpp.obj"
   "CMakeFiles/parser.dir/reminder.cpp.obj"
+  "CMakeFiles/parser.dir/symbol_table.cpp.obj"
   "CMakeFiles/parser.dir/token.cpp.obj"
   "libparser.dll.a"
   "parser.exe"

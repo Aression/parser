@@ -107,6 +107,12 @@
 		<Unit filename="D:/CPPWorkDIR/parser/reminder.h">
 			<Option target="parser"/>
 		</Unit>
+		<Unit filename="D:/CPPWorkDIR/parser/symbol_table.cpp">
+			<Option target="parser"/>
+		</Unit>
+		<Unit filename="D:/CPPWorkDIR/parser/symbol_table.h">
+			<Option target="parser"/>
+		</Unit>
 		<Unit filename="D:/CPPWorkDIR/parser/token.cpp">
 			<Option target="parser"/>
 		</Unit>
