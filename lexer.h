@@ -13,36 +13,33 @@
 using namespace std;
 
 // Get next char
-#define getnext (last_char = reader->get_char())
+#define getnext (last_char = reader.get_char())
 
 // Read a character ahead of time
-#define SEEK (reader->seek())
+#define SEEK (reader.seek())
 
 class lexer
 {
 private:
     string ident;
-    FileReader *reader;
-    Reminder *reminder;
-    int normal;
+    FileReader &reader;
+    Reminder &reminder;
 public:
-    explicit lexer(FileReader *reader, ostream &err):reader(reader){
-        reminder = new Reminder(err);
-        normal=1;
-    }
+    explicit lexer(FileReader &reader, Reminder &reminder):reader(reader),reminder(reminder){};
 
     // get next token.
     Token &get_token();
 
-    int line();
+    int line(){
+        return reader.getLineno();
+    }
+    int col(){
+        return reader.getColno();
+    }
 
-    int col();
-
-    // record error
-    void err(const string& msg);
-
-    // record warn
-    void warn(const string& msg);
+    void logerr(const string & msg){
+        reminder.logerr(reader,msg);
+    }
 };
 
 #endif //PARSER_LEXER_H

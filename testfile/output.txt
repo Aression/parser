@@ -1,264 +1,248 @@
-CONSTTK const
+valid token position is: line=0, col=1
+0 Test PARSER LOGGER
+valid token position is: line=0, col=7
+0 Test PARSER LOGGER
+valid token position is: line=0, col=11
+0 Test PARSER LOGGER
+valid token position is: line=0, col=18
+0 Test PARSER LOGGER
+valid token position is: line=0, col=20
+0 Test PARSER LOGGER
+valid token position is: line=0, col=23
+0 Test PARSER LOGGER
+valid token position is: line=0, col=25
+0 Test PARSER LOGGER
+valid token position is: line=0, col=32
+0 Test PARSER LOGGER
+valid token position is: line=0, col=34
+0 Test PARSER LOGGER
+valid token position is: line=0, col=35
+0 Test PARSER LOGGER
+valid token position is: line=0, col=38
+1 Test PARSER LOGGER
+valid token position is: line=1, col=1
+1 Test PARSER LOGGER
+valid token position is: line=1, col=7
+1 Test PARSER LOGGER
+valid token position is: line=1, col=12
+1 Test PARSER LOGGER
+valid token position is: line=1, col=19
+1 Test PARSER LOGGER
+valid token position is: line=1, col=21
+1 Test PARSER LOGGER
+valid token position is: line=1, col=24
+2 Test PARSER LOGGER
+valid token position is: line=2, col=1
+2 Test PARSER LOGGER
+valid token position is: line=2, col=5
+2 Test PARSER LOGGER
+valid token position is: line=2, col=12
+3 Test PARSER LOGGER
+valid token position is: line=3, col=1
+3 Test PARSER LOGGER
+valid token position is: line=3, col=6
+3 Test PARSER LOGGER
+valid token position is: line=3, col=13
+4 Test PARSER LOGGER
+valid token position is: line=4, col=1
+4 Test PARSER LOGGER
+valid token position is: line=4, col=5
+4 Test PARSER LOGGER
+valid token position is: line=4, col=10
+4 Test PARSER LOGGER
+valid token position is: line=4, col=11
+4 Test PARSER LOGGER
+valid token position is: line=4, col=15
+4 Test PARSER LOGGER
+valid token position is: line=4, col=19
+4 Test PARSER LOGGER
+valid token position is: line=4, col=20
+4 Test PARSER LOGGER
+valid token position is: line=4, col=24
+4 Test PARSER LOGGER
+valid token position is: line=4, col=28
+4 Test PARSER LOGGER
+valid token position is: line=4, col=29
+5 Test PARSER LOGGER
+valid token position is: line=5, col=5
+5 Test PARSER LOGGER
+valid token position is: line=5, col=13
+5 Test PARSER LOGGER
+valid token position is: line=5, col=15
+5 Test PARSER LOGGER
+valid token position is: line=5, col=20
+5 Test PARSER LOGGER
+valid token position is: line=5, col=22
+5 Test PARSER LOGGER
+valid token position is: line=5, col=26
+6 Test PARSER LOGGER
+valid token position is: line=6, col=5
+6 Test PARSER LOGGER
+valid token position is: line=6, col=12
+6 Test PARSER LOGGER
+valid token position is: line=6, col=13
+6 Test PARSER LOGGER
+valid token position is: line=6, col=20
+6 Test PARSER LOGGER
+valid token position is: line=6, col=21
+7 Test PARSER LOGGER
+valid token position is: line=7, col=1
+8 Test PARSER LOGGER
+valid token position is: line=8, col=1
+8 Test PARSER LOGGER
+valid token position is: line=8, col=6
+8 Test PARSER LOGGER
+valid token position is: line=8, col=10
+8 Test PARSER LOGGER
+valid token position is: line=8, col=11
+8 Test PARSER LOGGER
+valid token position is: line=8, col=12
+9 Test PARSER LOGGER
+valid token position is: line=9, col=5
+9 Test PARSER LOGGER
+valid token position is: line=9, col=11
+9 Test PARSER LOGGER
+valid token position is: line=9, col=12
+9 Test PARSER LOGGER
+valid token position is: line=9, col=25
+9 Test PARSER LOGGER
+valid token position is: line=9, col=26
+10 Test PARSER LOGGER
+valid token position is: line=10, col=5
+10 Test PARSER LOGGER
+valid token position is: line=10, col=11
+10 Test PARSER LOGGER
+valid token position is: line=10, col=12
+10 Test PARSER LOGGER
+valid token position is: line=10, col=17
+10 Test PARSER LOGGER
+valid token position is: line=10, col=18
+10 Test PARSER LOGGER
+valid token position is: line=10, col=20
+10 Test PARSER LOGGER
+valid token position is: line=10, col=22
+10 Test PARSER LOGGER
+valid token position is: line=10, col=24
+10 Test PARSER LOGGER
+valid token position is: line=10, col=25
+10 Test PARSER LOGGER
+valid token position is: line=10, col=26
+11 Test PARSER LOGGER
+valid token position is: line=11, col=1
+11 Test PARSER LOGGER
+11 FileEnd!
+CONSTTK coNst
 INTTK int
-IDENFR sd
+IDENFR cONst1
 ASSIGN =
-INTCON 12
+INTCON 001
+<无符号整数>
+<整数>
+COMMA ,
+IDENFR const2
+ASSIGN =
+MINU -
+INTCON 100
 <无符号整数>
 <整数>
 <常量定义>
 SEMICN ;
 CONSTTK const
 CHARTK char
-IDENFR f
+IDENFR const3
 ASSIGN =
-CHARCON s
+CHARCON _
 <常量定义>
 SEMICN ;
 <常量说明>
 INTTK int
-IDENFR s
-ASSIGN =
-INTCON 1
-<无符号整数>
-<整数>
-<常量>
-<变量定义及初始化>
+IDENFR change1
+<变量定义无初始化>
 <变量定义>
 SEMICN ;
-INTTK int
-IDENFR a
-LBRACK [
-INTCON 2
-<无符号整数>
-RBRACK ]
-ASSIGN =
-LBRACE {
-INTCON 1
-<无符号整数>
-<整数>
-<常量>
-COMMA ,
-INTCON 2
-<无符号整数>
-<整数>
-<常量>
-RBRACE }
-<变量定义及初始化>
-<变量定义>
-SEMICN ;
-INTTK int
-IDENFR b
-LBRACK [
-INTCON 2
-<无符号整数>
-RBRACK ]
-LBRACK [
-INTCON 2
-<无符号整数>
-RBRACK ]
-ASSIGN =
-LBRACE {
-LBRACE {
-INTCON 1
-<无符号整数>
-<整数>
-<常量>
-COMMA ,
-INTCON 2
-<无符号整数>
-<整数>
-<常量>
-RBRACE }
-COMMA ,
-LBRACE {
-INTCON 3
-<无符号整数>
-<整数>
-<常量>
-COMMA ,
-INTCON 4
-<无符号整数>
-<整数>
-<常量>
-RBRACE }
-RBRACE }
-<变量定义及初始化>
+CHARTK char
+IDENFR change3
+<变量定义无初始化>
 <变量定义>
 SEMICN ;
 <变量说明>
-CONSTTK const
 INTTK int
-IDENFR s1d
-ASSIGN =
-INTCON 12
-<无符号整数>
-<整数>
-<常量定义>
-SEMICN ;
-CONSTTK const
-CHARTK char
-IDENFR f1
-ASSIGN =
-CHARCON s
-<常量定义>
-SEMICN ;
-<常量说明>
-VOIDTK void
-IDENFR f1
+IDENFR gets1
+<声明头部>
 LPARENT (
 INTTK int
-IDENFR a
+IDENFR var1
+COMMA ,
+INTTK int
+IDENFR var2
 <参数表>
 RPARENT )
 LBRACE {
-SWITCHTK switch
-LPARENT (
-IDENFR a
-<因子>
-<项>
-<表达式>
-RPARENT )
-LBRACE {
-CASETK case
-INTCON 1
-<无符号整数>
-<整数>
-<常量>
-COLON :
-PRINTFTK printf
-LPARENT (
-STRCON fuck1
-<字符串>
-RPARENT )
-<写语句>
-SEMICN ;
-<语句>
-<情况子语句>
-CASETK case
-INTCON 2
-<无符号整数>
-<整数>
-<常量>
-COLON :
-IDENFR s
+IDENFR change1
 ASSIGN =
-INTCON 121
-<无符号整数>
-<整数>
+IDENFR var1
 <因子>
 <项>
 PLUS +
-INTCON 12
-<无符号整数>
-<整数>
+IDENFR var2
 <因子>
 <项>
 <表达式>
 <赋值语句>
 SEMICN ;
 <语句>
-<情况子语句>
-<情况表>
-DEFAULTTK default
-COLON :
-PRINTFTK printf
-LPARENT (
-STRCON fuck2
-<字符串>
-RPARENT )
-<写语句>
-SEMICN ;
-<语句>
-<缺省>
-RBRACE }
-情况语句
 RETURNTK return
-<语句>
+LPARENT (
+IDENFR change1
+<因子>
+<项>
+<表达式>
+RPARENT )
+<返回语句>
 SEMICN ;
+<语句>
 <语句列>
 <复合语句>
 RBRACE }
-<无返回值函数定义>
+<有返回值函数定义>
 VOIDTK void
 MAINTK main
 LPARENT (
 RPARENT )
 LBRACE {
-WHILETK while
+PRINTFTK printf
 LPARENT (
-INTCON 1
-<无符号整数>
-<整数>
-<因子>
-<项>
-<表达式>
-<条件>
+STRCON Hello World
+<字符串>
 RPARENT )
-LBRACE {
-IDENFR f1
-LPARENT (
-IDENFR s
-<因子>
-<项>
-<表达式>
-<值参数表>
-RPARENT )
-<无返回值函数调用语句>
+<写语句>
 SEMICN ;
 <语句>
-<语句列>
-RBRACE }
-<语句>
-<循环语句>
-<语句>
-FORTK for
+PRINTFTK printf
 LPARENT (
-IDENFR i
-ASSIGN =
-INTCON 1
-<无符号整数>
-<整数>
-<因子>
-<项>
-<表达式>
-SEMICN ;
-IDENFR i
-<因子>
-<项>
-<表达式>
-LSS <
+IDENFR gets1
+LPARENT (
 INTCON 10
 <无符号整数>
 <整数>
 <因子>
 <项>
 <表达式>
-<条件>
-SEMICN ;
-IDENFR i
-ASSIGN =
-IDENFR i
-PLUS +
-INTCON 2
+COMMA ,
+INTCON 20
 <无符号整数>
-<步长>
+<整数>
+<因子>
+<项>
+<表达式>
+<值参数表>
 RPARENT )
-LBRACE {
-PRINTFTK printf
-LPARENT (
-STRCON TEST END
-<字符串>
+<有返回值函数调用语句>
+<因子>
+<项>
+<表达式>
 RPARENT )
 <写语句>
-SEMICN ;
-<语句>
-<语句列>
-RBRACE }
-<语句>
-<循环语句>
-<语句>
-RETURNTK return
-<返回语句>
 SEMICN ;
 <语句>
 <语句列>

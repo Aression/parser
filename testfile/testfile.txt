@@ -1,29 +1,12 @@
-const int sd = 12;
-const char f = 's';
-int s=1;
-int a[2]={1,2};
-int b[2][2]={{1,2},{3,4}};
-const int s1d = 12;
-const char f1 = 's';
-
-void f1(int a){
-    switch(a){
-        case 1:
-            printf("fuck1");
-        case 2:
-            s = 121+12;
-        default:
-            printf("fuck2");
-    }
-    return;
+coNst int cONst1 = 001, const2 = -100;
+const char const3 = '_';
+int change1;
+char change3;
+int gets1(int var1,int var2){
+    change1 = var1 + var2;
+    return (change1);
 }
-
 void main(){
-    while(1){
-        f1(s);
-    }
-    for(i=1;i<10;i=i+2){
-        printf("TEST END");
-    }
-    return;
+    printf("Hello World");
+    printf(gets1(10, 20));
 }

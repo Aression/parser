@@ -21,7 +21,6 @@ bool cmp_str_i(string a, string b) {
 }
 
 Token &lexer::get_token(){
-
     static char last_char = ' ';
     while(isspace(last_char)){
         getnext;
@@ -29,16 +28,17 @@ Token &lexer::get_token(){
 
     pair<int,int> position = make_pair(line(),col());
 
-    // 如果遇到文件的末尾 或者已经停止获取了
-    if (last_char == EOF || !normal) {
+    // 如果遇到文件的末尾
+    if (last_char == EOF) {
         token = Token(TokenType::EOFTOK, "");
         token.position=position;
+        logerr("FileEnd!");
         return token;
     }
 
     if(last_char == '_'){
         ident = last_char;
-        while (isalnum(last_char = reader->get_char()) || last_char == '_') {
+        while (isalnum(last_char = reader.get_char()) || last_char == '_') {
             ident += last_char;
         }
         token = Token(TokenType::IDENFR, ident);
@@ -49,7 +49,7 @@ Token &lexer::get_token(){
     // 判断identifier和keyword
     if (isalpha(last_char)) {
         ident = last_char;
-        while (isalnum(last_char = reader->get_char()) || last_char == '_') {
+        while (isalnum(last_char = reader.get_char()) || last_char == '_') {
             ident += last_char;
         }
         if (cmp_str_i(ident,"const")) {
@@ -137,7 +137,7 @@ Token &lexer::get_token(){
     // 判断字符串
     if (last_char == '\"') {
         std::string str;
-        while ((last_char = reader->get_char()) != '\"') {
+        while ((last_char = reader.get_char()) != '\"') {
             str += last_char;
         }
         getnext;
@@ -150,7 +150,7 @@ Token &lexer::get_token(){
     else if (last_char == '\'') {
         int count = 0;//记录被单引号包裹的字符的数量,如果大于1的话就报错
         std::string str;
-        while ((last_char = reader->get_char()) != '\'') {
+        while ((last_char = reader.get_char()) != '\'') {
             str += last_char;
             count++;
         }
@@ -185,7 +185,7 @@ Token &lexer::get_token(){
         return token;
     } else if (last_char == '<') {
         if (SEEK == '=') {
-            reader->get_char();
+            reader.get_char();
             getnext;
             token = Token(TokenType::LEQ, "<=");
             token.position=position;
@@ -197,7 +197,7 @@ Token &lexer::get_token(){
         return token;
     } else if (last_char == '>') {
         if (SEEK == '=') {
-            reader->get_char();
+            reader.get_char();
             getnext;
             token = Token(TokenType::GEQ, ">=");
             token.position=position;
@@ -210,7 +210,7 @@ Token &lexer::get_token(){
 
     } else if (last_char == '=') {
         if (SEEK == '=') {
-            reader->get_char();
+            reader.get_char();
             getnext;
             token = Token(TokenType::EQL, "==");
             token.position=position;
@@ -223,7 +223,7 @@ Token &lexer::get_token(){
 
     } else if (last_char == '!') {
         if (SEEK == '=') {
-            reader->get_char();
+            reader.get_char();
             getnext;
             token = Token(TokenType::NEQ, "!=");
             token.position=position;
@@ -282,32 +282,9 @@ Token &lexer::get_token(){
         return token;
     }
 
-    //    string unrecognized = "X";
-    //    unrecognized[0]=last_char;
-    //    token = Token(TokenType::UNREGONIZED, unrecognized);
-    //    err("Unrecognized char: ["+unrecognized+"]");
-
     token = unrecognized;
-    err("Unrecognized char");
-
     getnext;
     token.position=position;
+    token.normalToken=false;
     return token;
-}
-
-int lexer::line(){
-    return reader->getLineno();
-}
-
-int lexer::col(){
-    return reader->getColno();
-}
-
-void lexer::err(const string& msg) {
-    reminder->logerr(reader,msg);
-    normal=0;
-}
-
-void lexer::warn(const string& msg) {
-    reminder->logwarn(reader,msg);
 }

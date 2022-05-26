@@ -10,48 +10,48 @@ static Token curTok = Token(TokenType::UNREGONIZED, "");// 当前token
 Token unregonized = Token(TokenType::UNREGONIZED, "");
 unordered_map<string, bool> has_retval;
 
-
-
-
-parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out) {
+parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
     while (true) {
         // get all the offered token.
         Token token = lexer.get_token();
-        printf("token position is: line=%d, col=%d\n",token.position.first,token.position.second);
         if (token.type == TokenType::EOFTOK) break;
         tokList.emplace_back(token);
         if (token.type == TokenType::UNREGONIZED) break;
+        out << "valid token position is: line=" << token.position.first << ", col=" << token.position.second << endl;
+        logerr("Test PARSER LOGGER");
     }
     tokNum = tokList.size();//读取到的总token数目
     curIndex = 0;//将当前的读到的token的位置存储到index变量中
+    table = SymbolTable();//初始化符号表
+    depth = 0;//顶层（全局）
 }
 
-void parser::err(string msg, int errCode) {
-    /* err code:
-     * -1: no error
-     * 1: unsupported token type
-     * 2: SeekN Exceed Range
-     * 3: NextToken Exceed Range
-     */
-    string errPrefix;
-    switch(errCode){
-        case(-1): errPrefix = "Normal Exit";break;
-        case(1): errPrefix = "Unsupported Token Error";break;
-        case(2): errPrefix ="SeekN Exceed Range";break;
-        case(3): errPrefix = "NextToken Exceed Range";break;
-        default: break;
-    }
-    printf("[%s] %s\n",errPrefix.c_str(),msg.c_str());
-    printf("[ERROR] parse failed at the %dth token: [%s]\n", curIndex, curTok.literal.c_str());
-    exit(-1);
-}
+//void parser::err(string msg, int errCode) {
+//    /* err code:
+//     * -1: no error
+//     * 1: unsupported token type
+//     * 2: SeekN Exceed Range
+//     * 3: NextToken Exceed Range
+//     */
+//    string errPrefix;
+//    switch(errCode){
+//        case(-1): errPrefix = "Normal Exit";break;
+//        case(1): errPrefix = "Unsupported Token Error";break;
+//        case(2): errPrefix ="SeekN Exceed Range";break;
+//        case(3): errPrefix = "NextToken Exceed Range";break;
+//        default: break;
+//    }
+//    printf("[%s] %s\n",errPrefix.c_str(),msg.c_str());
+//    printf("[ERROR] parse failed at the %dth token: [%s]\n", curIndex, curTok.literal.c_str());
+//    exit(-1);
+//}
 
 Token &parser::seekN(int step) {
     if (curIndex + step >= 0 && curIndex + step - 1 < tokNum)
         return tokList[curIndex + step - 1];
     else {
         unregonized = Token(TokenType::UNREGONIZED, "EXCEED RANGE");
-        err("seekN exceed of range",2);
+//        err("seekN exceed of range",2);
         return unregonized;
     }
 }
@@ -61,7 +61,7 @@ void parser::getNextToken() {
         curTok = tokList[curIndex++];
     } else {
         curTok = unregonized;
-        err("getNextToken exceed of range",3);
+//        err("getNextToken exceed of range",3);
     }
     // 在更新curTok的同时向文件输出流中写入token的信息
     out << curTok.get_type() << " " << curTok.literal << endl;
@@ -449,7 +449,7 @@ void parser::parseStmt() {
         parseState();
         getNextToken();//eat 情况语句
     } else{
-        err("parse <phase> failed!",1);
+//        err("parse <phase> failed!",1);
     }
     out << "<语句>" << endl;
 }
@@ -758,11 +758,11 @@ void parser::parseState() {
             getNextToken();//现在是右边第二个大括号
             out << "情况语句" << endl;
         }else{
-            err("Failed to parse switch phase's condition table.", 1);
+//            err("Failed to parse switch phase's condition table.", 1);
         }
     }
     else{
-        err("Failed to parse switch phase.", 1);
+//        err("Failed to parse switch phase.", 1);
     }
 
 }

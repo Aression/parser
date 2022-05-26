@@ -30,7 +30,6 @@ int SymbolTable::insert(const string& name, const string& type, int blkn, int of
         // 正常，没有重复命名
         symbols.push_back(tmpNode);
     }else{
-        err(1);
         return 0;
     }
     return 1;

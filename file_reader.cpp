@@ -12,8 +12,7 @@ unsigned int FileReader::getColno() const {
     return colno;
 }
 
-FileReader::FileReader(const std::string &path) {
-    std::ifstream ifstream(path);
+FileReader::FileReader(std::ifstream &ifstream) {
     if (ifstream.is_open()) {
         std::stringstream buffer;
         buffer << ifstream.rdbuf();

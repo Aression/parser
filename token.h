@@ -73,6 +73,7 @@ public:
     std::string get_type();
 
     std::pair<int,int> position;//token的位置，格式为[行，列]
+    bool normalToken;//标识该token中是否有非法符号
 };
 
 #endif //PARSER_TOKEN_H

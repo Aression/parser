@@ -19,9 +19,9 @@ class FileReader {
 public:
     /**
      *
-     * @param path
+     * @param ifstream
      */
-    explicit FileReader(const std::string &path);
+    explicit FileReader(std::ifstream &ifstream);
 
     /**
      * 获得行号

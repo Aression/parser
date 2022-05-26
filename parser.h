@@ -28,8 +28,6 @@ private:
 
     // 记录当前块的嵌套深度
     int depth;
-    // 记录当前是第几行
-    int row;
 
     // get the next token and output its value
     void getNextToken();
@@ -37,8 +35,13 @@ private:
     // Look back at a few tokens
     Token &seekN(int index);
 
-    void err(string msg, int errCode);
+//    void err(string msg, int errCode);
 public:
+
+    void logerr(const string & msg){
+        lex.logerr(msg);
+    }
+
     parser(lexer &lex, ofstream &out);
 
     /**

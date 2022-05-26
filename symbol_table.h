@@ -119,20 +119,6 @@ private:
         return flag;
     }
 
-    // 报错处理
-    // errcode==1: 块内重复定义
-    // errcode==2:
-    void err(int errcode){
-        switch (errcode){
-            case 1:
-                printf("[SYMBOL TABLE]: multiple definition.\n");
-                break;
-            default:
-                break;
-        }
-
-    }
-
 public:
 
     SymbolTable();

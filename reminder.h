@@ -12,14 +12,11 @@ class Reminder
 {
 private:
     std::ostream &err;
-    void report(unsigned int line, unsigned int col, const string &msg, const string &prefix);
+    void report(unsigned int line, const string &msg);
 
 public:
     explicit Reminder(ostream &error_stream);
-
-    void logerr(const FileReader *reader, const string &msg);
-
-    void logwarn(const FileReader *reader, const string &msg);
+    void logerr(const FileReader & reader, const string & msg);
 };
 
 #endif //PARSER_REMINDER_H
