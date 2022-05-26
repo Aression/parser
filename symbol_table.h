@@ -6,63 +6,157 @@
 #define PARSER_SYMBOL_TABLE_H
 
 #include "token.h"
-#include "unordered_map"
-
+#include "bits/stdc++.h"
 /*
-1.符号表的作用：
- 符号表是编译程序的一个主要数据结构，符号表通常与编译程序的各个阶段有关，编译程序的各阶段需要不断向符号表输入信息，或者通过它消除二义性。
+    1.符号表的作用：
+     符号表是编译程序的一个主要数据结构，符号表通常与编译程序的各个阶段有关，编译程序的各阶段需要不断向符号表输入信息，或者通过它消除二义性。
 
-具体有下面几个：
-（1）收集符号的属性。
-（2）提供上下文语义的合法性检查的依据。
-（3）作为目标代码生成阶段地址分配的依据。
+    具体有下面几个：
+    （1）收集符号的属性。
+    （2）提供上下文语义的合法性检查的依据。
+    （3）作为目标代码生成阶段地址分配的依据。
 
-2.符号表的内容：
- 一般来说，符号表的每一项（称为表项）包含两个部分（或称区段、字域），即名字栏和信息栏。
+    2. 组织形式：
+    含有的数据结构：
+        - 栈式符号表
+        - struct符号表体，包含id，名字，类型，维数，声明行，引用行
+        - 块索引表，存储新块的第一个数据项指针
 
-3.符号表的总体组织：
-第1种组织结构：按照属性种类完全相同的那些符号组织在一起。
-第2种组织结构：把所有语言中的符号都组织在一张符号表中。
-第3种组织结构：折中方式。
+    3. 进出策略：
+        1. 当出现声明语句时
+            - 查重，确定表项位置
+            - 插入建立新表项
+        2. 处理引用：
+            - 查找信息以进行语义信息和代码生成
+            - 发现未定义的名字
+        3. 定位：
+            - 识别出块时开始执行，在大表里面新建一个子表
+        4. 重定位：
+            - 在块结束时删除子表
 
-4.符号表的构建与查找：
-- 线性查找；
-- 对折查找；
-- 杂凑技术（杂凑法是一种争取查表、填表两方面能高速进行的统一技术。 ）。
 
- 设计思路：
- 1. 将所有符号组织在一张符号表中
- 2. 表项：
-    - 名字栏：
-    - 信息栏：
-        · 符号类型
-        · 符号存储类别
-        · 符号作用域和可视性
-        · 符号变量的存储分配信息
-        · 符号的其他属性
- 3. 数据结构：
-    - 哈希表
- 4. 查找技术：
-    - 随机映射
+ ref-vector相关：
+    vector：
+        http://c.biancheng.net/view/6749.html
+    iterator：
+        https://www.jianshu.com/p/8115ea277ecd
+
+ 【测试用例说明】
+  仅包含常量说明、变量说明、读语句、写语句、赋值语句
+  无函数定义及调用，无数组声明及引用。
+
+ 【目标代码说明】
+
+ （1）PCODE代码的定义可参见教材《编译技术》P458，张莉等，高等教育出版社，Pascal-S指令代码集，可以进行修改，解释执行程序也可以借鉴Pascal-S编译器源码中的解释执行程序，若PCODE代码修改了请相应修改解释执行程序
+
+ （2）MIPS代码可以选择基础指令及伪指令，不能选择宏指令； MARS 使用 4.5 版本，请下载修改过的版本，关闭延迟槽，内存配置为默认选项
 */
 
 using namespace std;
 
+
 struct node{
-    Token token;//符号
-    string storageType;//符号存储类别
-    string effectArea;//符号作用域和可视性
-    string storageAlloc;//符号变量的存储分配信息
+    // 名字。
+    // 当且仅当两个node的name和type都一样时才会被检测出重复。
+    string name="None";
+
+    // 类型：
+    // 1. int,char,string,list1d,list2d
+    // 2. function
+    string type="None";
+
+    // 二元地址
+    int blkn=-1; // 块的嵌套深度
+    int offset=-1; // 变量的目标地址偏移量
+
+    int dims=-1;// 维数
+
+    int declarRow=-1;// 声明行
+    vector<int> refRows;// 引用行
+
+    // 重载==
+    bool operator ==(const node& l){
+        return name == l.name && type == l.type;
+    }
+
+    node(const string& basicString, const string& basicString1, int i, int i1, int i2, int i3, vector<int> vec) {
+        name = basicString;type=basicString1;
+        blkn=i;offset=i1;dims=i2;
+        declarRow=i3;
+        copy(vec.begin(),vec.end(),refRows.begin());
+    }
+
+    node(const string& basicString, const string& basicString1) {
+        name = basicString;type=basicString1;
+    }
 };
 
 class SymbolTable{
 private:
-    unordered_map<string, node> table;
+    // 堆栈式符号表
+    // 当遇到变量声明时，将包含变量属性的记录入栈
+    // 当到达块结尾时，将该块中声明的所有变量的记录出栈
+    vector<node> symbols;
+
+    // 栈顶指针，指向当前有效的栈顶元素
+    // vector<node>::iterator top;（X)
+    // 直接用symbols.back()就行
+
+    // 块索引表，存储一系列迭代器以指向所有块的开始元素的下标
+    vector<int> blockIndexTabs;
+
+    // 检查块内重名
+    // flag==0: normally
+    // flag==-1: multiple definition
+    int checkMultipleName(const node& curnode){
+        int flag = 0;
+        //如果符号表为空直接通过检查
+        if(symbols.empty()) return 0;
+        //否则检查重名
+        for(auto i = blockIndexTabs.back();i<symbols.size();i++){
+            if(symbols[i] == curnode) flag=-1;
+        }
+        return flag;
+    }
+
+    // 报错处理
+    // errcode==1: 块内重复定义
+    // errcode==2:
+    void err(int errcode){
+        switch (errcode){
+            case 1:
+                printf("[SYMBOL TABLE]: multiple definition.\n");
+                break;
+            default:
+                break;
+        }
+
+    }
+
 public:
+
     SymbolTable();
     ~SymbolTable();
 
-    int insert(Token token);
+    //检查子表中是否有重名变量
+    //无，新记录压入栈顶
+    //有，报告错误
+    int insert(const string& name, const string& type, int blkn, int offset, int dims, int declarRow, vector<int> refRows);
+
+    //从栈顶到栈底线性检索
+    //在当前子表中找到，局部变量
+    //在其他子表中找到，非局部名字
+    //实现了最近嵌套作用域原则
+    int islocal(const string& name, const string& type);
+
+    //将栈顶指针top的值压入块索引表顶端。
+    //块索引表的元素是指针，指向相应块的子表中第一个记录在栈中的位置。（vector里面的iterator）
+    void loc();
+
+    //重定位
+    //用块索引表顶端元素的值恢复栈顶指针top，完成重定位操作。（pop 直到 *top==curitem）
+    //有效地清除刚刚被编译完的块在栈式符号表中的所有记录。
+    void reloc();
 };
 
 #endif //PARSER_SYMBOL_TABLE_H

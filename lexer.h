@@ -34,6 +34,10 @@ public:
     // get next token.
     Token &get_token();
 
+    int line();
+
+    int col();
+
     // record error
     void err(const string& msg);
 

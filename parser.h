@@ -11,6 +11,7 @@
 #define PARSER_PARSER_H
 
 #include "lexer.h"
+#include "symbol_table.h"
 using namespace std;
 
 class parser
@@ -20,9 +21,15 @@ private:
     ofstream &out;
 
     vector<Token> tokList;
+    SymbolTable table;//语法翻译用的符号表
 
     int tokNum;
     int curIndex;
+
+    // 记录当前块的嵌套深度
+    int depth;
+    // 记录当前是第几行
+    int row;
 
     // get the next token and output its value
     void getNextToken();

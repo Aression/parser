@@ -71,6 +71,8 @@ public:
     std::string literal; // token的值
     TokenType type;
     std::string get_type();
+
+    std::pair<int,int> position;//token的位置，格式为[行，列]
 };
 
 #endif //PARSER_TOKEN_H

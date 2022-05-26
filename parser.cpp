@@ -10,10 +10,14 @@ static Token curTok = Token(TokenType::UNREGONIZED, "");// 当前token
 Token unregonized = Token(TokenType::UNREGONIZED, "");
 unordered_map<string, bool> has_retval;
 
+
+
+
 parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out) {
     while (true) {
         // get all the offered token.
         Token token = lexer.get_token();
+        printf("token position is: line=%d, col=%d\n",token.position.first,token.position.second);
         if (token.type == TokenType::EOFTOK) break;
         tokList.emplace_back(token);
         if (token.type == TokenType::UNREGONIZED) break;
@@ -152,6 +156,7 @@ void parser::parseConstStmt() {
     out << "<常量说明>" << endl;
 }
 
+
 //  ＜常量定义＞ ::= int＜标识符＞＝＜整数＞{,＜标识符＞＝＜整数＞}
 //               | char＜标识符＞＝＜字符＞{,＜标识符＞＝＜字符＞}
 void parser::parseConstDef() {
@@ -159,6 +164,7 @@ void parser::parseConstDef() {
     if (curTok.type == TokenType::INTTK) {
         getNextToken();//eat int
         getNextToken();//eat 标识符
+//        if(table.insert(curTok.literal,curTok.type,))
         getNextToken();//eat =
         parseInteger();
         while (seekN(1).type == TokenType::COMMA) {
