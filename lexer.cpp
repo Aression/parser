@@ -6,7 +6,6 @@
 
 // unrecognized token
 static Token token(TokenType::UNREGONIZED, "");
-static Token unrecognized(TokenType::UNREGONIZED, "");
 
 string strToLower(const string& strA) {
     string strTmp = strA;
@@ -32,7 +31,6 @@ Token &lexer::get_token(){
     if (last_char == EOF) {
         token = Token(TokenType::EOFTOK, "");
         token.position=position;
-        logerr("FileEnd!");
         return token;
     }
 
@@ -134,31 +132,48 @@ Token &lexer::get_token(){
         return token;
     }
 
-    // 判断字符串
+    // 判断字符串是否合法: 十进制编码为32,33,35-126的ASCII字符
     if (last_char == '\"') {
         std::string str;
+        int strnormal=1;
         while ((last_char = reader.get_char()) != '\"') {
+            if(!(last_char == 32 || last_char==33 || (last_char>=35 && last_char<=126))){
+                strnormal=0;
+            }
             str += last_char;
         }
         getnext;
-        //todo 字符串中间可能会含有引号
-        token = Token(TokenType::STRCON, str);
+        //字符串中间有引号的情况不考虑
+        if(strnormal==0){
+            logerr("a");//非法字符串
+            token = Token(TokenType::UNREGONIZED, str);
+            token.normalToken=false;
+        }else{
+            token = Token(TokenType::STRCON, str);
+        }
         token.position=position;
         return token;
     }
-        //判断字符
+        //判断字符异常情况
     else if (last_char == '\'') {
         int count = 0;//记录被单引号包裹的字符的数量,如果大于1的话就报错
         std::string str;
+        int normalchar=1;
         while ((last_char = reader.get_char()) != '\'') {
+            if(!(isalnum(last_char) || last_char=='+'||last_char=='-' || last_char=='*'||last_char=='/')){
+                normalchar=0;
+            }
             str += last_char;
             count++;
         }
-        if (count != 1) {
-            // reminder->logwarn(reader,"illegal char");
+        if(normalchar==0 || count > 1){
+            logerr("a");//非法字符
+            token = Token(TokenType::UNREGONIZED, str);
+            token.normalToken=false;
+        }else if(count==1){//正常的
+            token = Token(TokenType::CHARCON, str);
         }
         getnext;
-        token = Token(TokenType::CHARCON, str);
         token.position=position;
         return token;
     }
@@ -229,10 +244,11 @@ Token &lexer::get_token(){
             token.position=position;
             return token;
         } else {
-            // todo 需要进行错误处理
             getnext;
             token = Token(TokenType::UNREGONIZED, "!");
+            logerr("a");//非法符号
             token.position=position;
+            token.normalToken=false;
             return token;
         }
     }else if (last_char == ':') {
@@ -281,10 +297,12 @@ Token &lexer::get_token(){
         token.position=position;
         return token;
     }
-
-    token = unrecognized;
-    getnext;
+    logerr("a");//未定义的字符
+    std::string literal;
+    literal+=last_char;
+    token = Token(TokenType::UNREGONIZED,literal);
     token.position=position;
     token.normalToken=false;
+    getnext;
     return token;
 }

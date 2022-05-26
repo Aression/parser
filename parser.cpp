@@ -16,9 +16,7 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
         Token token = lexer.get_token();
         if (token.type == TokenType::EOFTOK) break;
         tokList.emplace_back(token);
-        if (token.type == TokenType::UNREGONIZED) break;
-        out << "valid token position is: line=" << token.position.first << ", col=" << token.position.second << endl;
-        logerr("Test PARSER LOGGER");
+        //out << "valid token position is: line=" << token.position.first << ", col=" << token.position.second << endl;
     }
     tokNum = tokList.size();//读取到的总token数目
     curIndex = 0;//将当前的读到的token的位置存储到index变量中
@@ -46,6 +44,7 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
 //    exit(-1);
 //}
 
+//todo: 需要调整parser对于UNRECOGNIZED型的标识符的处理方式
 Token &parser::seekN(int step) {
     if (curIndex + step >= 0 && curIndex + step - 1 < tokNum)
         return tokList[curIndex + step - 1];

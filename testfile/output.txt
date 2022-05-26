@@ -1,215 +1,118 @@
-valid token position is: line=0, col=1
-0 Test PARSER LOGGER
-valid token position is: line=0, col=7
-0 Test PARSER LOGGER
-valid token position is: line=0, col=11
-0 Test PARSER LOGGER
-valid token position is: line=0, col=18
-0 Test PARSER LOGGER
-valid token position is: line=0, col=20
-0 Test PARSER LOGGER
-valid token position is: line=0, col=23
-0 Test PARSER LOGGER
-valid token position is: line=0, col=25
-0 Test PARSER LOGGER
-valid token position is: line=0, col=32
-0 Test PARSER LOGGER
-valid token position is: line=0, col=34
-0 Test PARSER LOGGER
-valid token position is: line=0, col=35
-0 Test PARSER LOGGER
-valid token position is: line=0, col=38
-1 Test PARSER LOGGER
-valid token position is: line=1, col=1
-1 Test PARSER LOGGER
-valid token position is: line=1, col=7
-1 Test PARSER LOGGER
-valid token position is: line=1, col=12
-1 Test PARSER LOGGER
-valid token position is: line=1, col=19
-1 Test PARSER LOGGER
-valid token position is: line=1, col=21
-1 Test PARSER LOGGER
-valid token position is: line=1, col=24
-2 Test PARSER LOGGER
-valid token position is: line=2, col=1
-2 Test PARSER LOGGER
-valid token position is: line=2, col=5
-2 Test PARSER LOGGER
-valid token position is: line=2, col=12
-3 Test PARSER LOGGER
-valid token position is: line=3, col=1
-3 Test PARSER LOGGER
-valid token position is: line=3, col=6
-3 Test PARSER LOGGER
-valid token position is: line=3, col=13
-4 Test PARSER LOGGER
-valid token position is: line=4, col=1
-4 Test PARSER LOGGER
-valid token position is: line=4, col=5
-4 Test PARSER LOGGER
-valid token position is: line=4, col=10
-4 Test PARSER LOGGER
-valid token position is: line=4, col=11
-4 Test PARSER LOGGER
-valid token position is: line=4, col=15
-4 Test PARSER LOGGER
-valid token position is: line=4, col=19
-4 Test PARSER LOGGER
-valid token position is: line=4, col=20
-4 Test PARSER LOGGER
-valid token position is: line=4, col=24
-4 Test PARSER LOGGER
-valid token position is: line=4, col=28
-4 Test PARSER LOGGER
-valid token position is: line=4, col=29
-5 Test PARSER LOGGER
-valid token position is: line=5, col=5
-5 Test PARSER LOGGER
-valid token position is: line=5, col=13
-5 Test PARSER LOGGER
-valid token position is: line=5, col=15
-5 Test PARSER LOGGER
-valid token position is: line=5, col=20
-5 Test PARSER LOGGER
-valid token position is: line=5, col=22
-5 Test PARSER LOGGER
-valid token position is: line=5, col=26
-6 Test PARSER LOGGER
-valid token position is: line=6, col=5
-6 Test PARSER LOGGER
-valid token position is: line=6, col=12
-6 Test PARSER LOGGER
-valid token position is: line=6, col=13
-6 Test PARSER LOGGER
-valid token position is: line=6, col=20
-6 Test PARSER LOGGER
-valid token position is: line=6, col=21
-7 Test PARSER LOGGER
-valid token position is: line=7, col=1
-8 Test PARSER LOGGER
-valid token position is: line=8, col=1
-8 Test PARSER LOGGER
-valid token position is: line=8, col=6
-8 Test PARSER LOGGER
-valid token position is: line=8, col=10
-8 Test PARSER LOGGER
-valid token position is: line=8, col=11
-8 Test PARSER LOGGER
-valid token position is: line=8, col=12
-9 Test PARSER LOGGER
-valid token position is: line=9, col=5
-9 Test PARSER LOGGER
-valid token position is: line=9, col=11
-9 Test PARSER LOGGER
-valid token position is: line=9, col=12
-9 Test PARSER LOGGER
-valid token position is: line=9, col=25
-9 Test PARSER LOGGER
-valid token position is: line=9, col=26
-10 Test PARSER LOGGER
-valid token position is: line=10, col=5
-10 Test PARSER LOGGER
-valid token position is: line=10, col=11
-10 Test PARSER LOGGER
-valid token position is: line=10, col=12
-10 Test PARSER LOGGER
-valid token position is: line=10, col=17
-10 Test PARSER LOGGER
-valid token position is: line=10, col=18
-10 Test PARSER LOGGER
-valid token position is: line=10, col=20
-10 Test PARSER LOGGER
-valid token position is: line=10, col=22
-10 Test PARSER LOGGER
-valid token position is: line=10, col=24
-10 Test PARSER LOGGER
-valid token position is: line=10, col=25
-10 Test PARSER LOGGER
-valid token position is: line=10, col=26
-11 Test PARSER LOGGER
-valid token position is: line=11, col=1
-11 Test PARSER LOGGER
-11 FileEnd!
-CONSTTK coNst
+1 a
+3 a
+UNREGONIZED #
+CONSTTK const
 INTTK int
-IDENFR cONst1
+IDENFR const1
 ASSIGN =
-INTCON 001
-<无符号整数>
-<整数>
+INTCON 1
+<语句>
 COMMA ,
+<语句>
 IDENFR const2
 ASSIGN =
 MINU -
 INTCON 100
 <无符号整数>
 <整数>
-<常量定义>
-SEMICN ;
-CONSTTK const
-CHARTK char
-IDENFR const3
-ASSIGN =
-CHARCON _
-<常量定义>
-SEMICN ;
-<常量说明>
-INTTK int
-IDENFR change1
-<变量定义无初始化>
-<变量定义>
-SEMICN ;
-CHARTK char
-IDENFR change3
-<变量定义无初始化>
-<变量定义>
-SEMICN ;
-<变量说明>
-INTTK int
-IDENFR gets1
-<声明头部>
-LPARENT (
-INTTK int
-IDENFR var1
-COMMA ,
-INTTK int
-IDENFR var2
-<参数表>
-RPARENT )
-LBRACE {
-IDENFR change1
-ASSIGN =
-IDENFR var1
-<因子>
-<项>
-PLUS +
-IDENFR var2
 <因子>
 <项>
 <表达式>
 <赋值语句>
 SEMICN ;
 <语句>
-RETURNTK return
-LPARENT (
-IDENFR change1
+CONSTTK const
+<语句>
+CHARTK char
+<语句>
+IDENFR const3
+ASSIGN =
+UNREGONIZED ?
 <因子>
 <项>
 <表达式>
-RPARENT )
-<返回语句>
+<赋值语句>
 SEMICN ;
 <语句>
-<语句列>
-<复合语句>
-RBRACE }
-<有返回值函数定义>
-VOIDTK void
-MAINTK main
+INTTK int
+<语句>
+IDENFR change1
+SEMICN ;
+CHARTK char
+<因子>
+<项>
+<表达式>
+<值参数表>
+IDENFR change3
+<无返回值函数调用语句>
+SEMICN ;
+<语句>
+INTTK int
+<语句>
+IDENFR gets1
 LPARENT (
+INTTK int
+<因子>
+<项>
+<表达式>
+<值参数表>
+IDENFR var1
+<无返回值函数调用语句>
+COMMA ,
+<语句>
+INTTK int
+<语句>
+IDENFR var2
 RPARENT )
 LBRACE {
+<因子>
+<项>
+<表达式>
+<值参数表>
+IDENFR change1
+<无返回值函数调用语句>
+ASSIGN =
+<语句>
+IDENFR var1
+PLUS +
+IDENFR var2
+<因子>
+<项>
+<表达式>
+<值参数表>
+RETURNTK return
+<无返回值函数调用语句>
+LPARENT (
+<语句>
+IDENFR change1
+RPARENT )
+SEMICN ;
+<因子>
+<项>
+<表达式>
+<值参数表>
+RBRACE }
+<无返回值函数调用语句>
+VOIDTK void
+<语句>
+MAINTK main
+<语句>
+LPARENT (
+<语句>
+RPARENT )
+<语句>
+LBRACE {
+IDENFR change1
+ASSIGN =
+INTCON 10
+<无符号整数>
+<整数>
+<因子>
+<项>
+<表达式>
+<赋值语句>
+SEMICN ;
+<语句>
 PRINTFTK printf
 LPARENT (
 STRCON Hello World
@@ -221,32 +124,27 @@ SEMICN ;
 PRINTFTK printf
 LPARENT (
 IDENFR gets1
+<因子>
+<项>
+<表达式>
 LPARENT (
-INTCON 10
-<无符号整数>
-<整数>
-<因子>
-<项>
-<表达式>
-COMMA ,
-INTCON 20
-<无符号整数>
-<整数>
-<因子>
-<项>
-<表达式>
-<值参数表>
-RPARENT )
-<有返回值函数调用语句>
-<因子>
-<项>
-<表达式>
-RPARENT )
 <写语句>
+INTCON 10
+<语句>
+COMMA ,
+<语句>
+INTCON 20
+<语句>
+RPARENT )
+<语句>
+RPARENT )
+<语句>
 SEMICN ;
+<语句列>
+RBRACE }
 <语句>
 <语句列>
 <复合语句>
-RBRACE }
+UNREGONIZED EXCEED RANGE
 <主函数>
 <程序>
