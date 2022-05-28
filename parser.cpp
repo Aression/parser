@@ -477,8 +477,8 @@ void parser::parseVoidFuncDef() {
 
 // ＜有返回值函数调用语句＞ ::= ＜标识符＞'('＜值参数表＞')'
 void parser::parseFuncCall() {
+    // 对于函数调用的处理类似于函数声明的处理，不过这里是处理标识符和值参数表
     getNextToken();//eat 标识符
-//    getNextToken();//eat (
     if (seekN(1).type!=TokenType::RPARENT){
         getNextToken();//eat (
         parseValArgList();
@@ -621,7 +621,7 @@ void parser::parseAssignStmt() {
         getNextToken();//eat =
         parseExpr();
     }
-        //＜标识符＞'['＜表达式＞']'=＜表达式＞
+    //＜标识符＞'['＜表达式＞']'=＜表达式＞
     else {
         getNextToken();//eat [
         parseExpr();
@@ -716,6 +716,7 @@ void parser::parseLoopStmt() {
 //＜值参数表＞ ::= ＜表达式＞{,＜表达式＞}｜＜空＞
 void parser::parseValArgList() {
     // 如果不为空
+    int argcount=0;
     if (curTok.type != TokenType::RPARENT) {
         parseExpr();
         while (seekN(1).type == TokenType::COMMA) {
