@@ -84,16 +84,40 @@ void SymbolTable::check() {
             printf("\t");
         }
         printf("index=%d, name=%s, type=%s, blkn=%d, declarRow=%d\n",i,symbols[i].name.c_str(),symbols[i].type.c_str(),symbols[i].blkn,symbols[i].declarRow);
+
+        if(!symbols[i].refRows.empty()){
+            for (int j = 0; j < symbols[i].blkn; ++j) {
+                printf("\t");
+            }
+            printf("[ref rows are: ");
+            for(const auto& j : symbols[i].refRows){
+                printf("%d, ",j);
+            }
+            printf("]\n");
+        }
+
+        if(symbols[i].type=="Function With Integer Return Value" || symbols[i].type == "Function Without Return Value"){
+            for (int j = 0; j < symbols[i].blkn; ++j) {
+                printf("\t");
+            }
+            printf("[this is a function, params are: ");
+            for(const auto& j: symbols[i].paramTypes){
+                printf("%s,",j.c_str());
+            }
+            printf("], param count=%d\n", symbols[i].params);
+        }
     }
     printf("-------------------------------\n");
 }
 
-void SymbolTable::ref(const string &name, const string &type, const int refrow) {
+int SymbolTable::ref(const string &name, int refrow) {
     for(auto & symbol : symbols){
-        if(symbol==node(name,type)){
+        if(symbol.name==name){
             symbol.refRows.push_back(refrow);
+            return 1;
         }
     }
+    return 0;
 }
 
 //void SymbolTable::refsymbol(const string& name, const string& type, const int refrow){

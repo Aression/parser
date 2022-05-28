@@ -212,7 +212,7 @@ public:
 
     void ins();
 
-    void refsymbol(const string &name, const string &type, const int refrow);
+    void refsymbol(const string &name, int refrow);
 };
 
 #endif //PARSER_PARSER_H

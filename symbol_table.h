@@ -79,7 +79,7 @@ struct node{
 
     // 重载==
     bool operator ==(const node& l){
-        return name == l.name && type == l.type;
+        return name == l.name;//5.28 进行了一处修改，只根据变量名判定重复
     }
 
     node(const string& basicString, const string& basicString1, int i, int i1, int i2, int i3, vector<int> vec) {
@@ -151,7 +151,7 @@ public:
     void reloc();
 
     //引用符号
-    void ref(const string &name, const string &type, int refrow);
+    int ref(const string &name, int refrow);
 };
 
 #endif //PARSER_SYMBOL_TABLE_H

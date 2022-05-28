@@ -19,16 +19,15 @@ void parser::ins(){
         if(!table.insert(cursymbol)){
             logerr(ERR::meaning(errs::b));// 同一作用域内重命名
         }
-
     }else{
         printf("[ERROR] CANNOT INSERT SYMBOL WITHOUT INIT.");
+        exit(-1);
     }
 }
 
-void parser::refsymbol(const string& name, const string& type, const int refrow){
-    int res = table.islocal(name,type);
-    if(res==1){
-        table.ref(name,type,refrow);
+void parser::refsymbol(const string& name, int refrow){
+    if(table.ref(name,refrow)==1){
+        // do nothing
     }else{
         logerr(ERR::meaning(errs::c));//引用了未定义的名字
     }
@@ -70,8 +69,7 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
 //    exit(-1);
 //}
 
-//todo: 需要调整parser对于UNRECOGNIZED型的标识符的处理方式
-//log：不是这个问题，是因为测试用例中return没有被正确的解析出来，所以后面才爆了。
+
 Token &parser::seekN(int step) {
     if (curIndex + step >= 0 && curIndex + step - 1 < tokNum)
         return tokList[curIndex + step - 1];
@@ -428,8 +426,6 @@ void parser::parseDeclHeader() {
 // ＜有返回值函数定义＞ ::= ＜声明头部＞'('＜参数表＞')' '{'＜复合语句＞'}'
 void parser::parseFuncDef() {
     parseDeclHeader();
-    table.loc();
-    depth++;
 
     getNextToken();//eat 声明头部
     if (seekN(1).type!=TokenType::RPARENT){
@@ -440,6 +436,7 @@ void parser::parseFuncDef() {
         out << "<参数表>" << endl;
         getNextToken();//eat (
     }
+
     getNextToken();//eat ),现在是{
     getNextToken();//现在是mulstmt里面第一个token
     parseMulStmt();
@@ -453,15 +450,12 @@ void parser::parseVoidFuncDef() {
     getNextToken();//eat void
     has_retval.insert(pair<string, bool>(curTok.literal, false));//记录当前函数类型: 无返回值
 
-
     cursymbol.type="Function Without Return Value";
     cursymbol.name=curTok.literal;
     cursymbol.blkn=depth;
     cursymbol.declarRow=curTok.position.first;
     cursymbol.dims=-1;
     ins();
-    table.loc();
-    depth++;
 
     getNextToken();//eat 标识符
     if (seekN(1).type!=TokenType::RPARENT){
@@ -472,6 +466,7 @@ void parser::parseVoidFuncDef() {
         out << "<参数表>" << endl;
         getNextToken();//eat (
     }
+
     getNextToken();//eat )
     getNextToken();//eat {
     parseMulStmt();
@@ -523,7 +518,7 @@ void parser::parseStep() {
  * ｜＜赋值语句＞;1
  * ｜＜读语句＞;1
  * ｜＜写语句＞;1
- * ｜＜情况语句＞0
+ * ｜＜情况语句＞1
  * ｜＜空＞;1
  * |＜返回语句＞;1
  * | '{'＜语句列＞'}'1
@@ -803,15 +798,39 @@ void parser::parseMain() {
 //＜参数表＞ ::= ＜类型标识符＞＜标识符＞{,＜类型标识符＞＜标识符＞}
 //            | ＜空＞
 void parser::parseArgList() {
-    //todo：处理参数表，将其引入符号表中函数定义的字段。
     //＜类型标识符＞＜标识符＞{,＜类型标识符＞＜标识符＞}
+    string type;
+    vector<pair<string,string>> args;
     if (curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK) {
-        getNextToken();//eat 类型标识符
+        cursymbol.paramTypes.push_back(curTok.literal);
+        type=curTok.literal;
+        getNextToken();//eat 类型标识符, 现在是标识符名称
+        args.emplace_back(type,curTok.literal);
+
         while (seekN(1).type == TokenType::COMMA) {
             getNextToken();//eat 标识符
-            getNextToken();//eat ,
-            getNextToken();//eat 类型标识符
+            getNextToken();//eat , 现在是类型标识符
+
+            cursymbol.paramTypes.push_back(curTok.literal);
+            type=curTok.literal;
+            getNextToken();//eat 类型标识符，现在是标识符名称
+            args.emplace_back(type,curTok.literal);
         }
+        cursymbol.params=args.size();
+        ins();//处理完毕，插入定义好的函数
+        table.loc();
+        depth++;
+
+        //插入参数表中定义的变量
+        for(auto & item : args){
+            clearinfo();
+            cursymbol.type = item.first;
+            cursymbol.name = item.second;
+            cursymbol.blkn = depth;
+            cursymbol.declarRow = curTok.position.first;
+            ins();
+        }
+
     }
     else {
         out << "<空>" << endl;
@@ -851,7 +870,9 @@ void parser::parseItem() {
 //          |＜字符＞
 //          ｜＜有返回值函数调用语句＞
 void parser::parseFactor() {
+    // 因子里面存在对于现有变量的引用
     if (curTok.type == TokenType::IDENFR) {
+        // 函数调用
         if (has_retval[curTok.literal]) {
             parseFuncCall();//有返回值函数调用语句
         } else if (seekN(1).type == TokenType::LBRACK) {
@@ -859,8 +880,10 @@ void parser::parseFactor() {
             getNextToken();//eat [
             parseExpr();
             getNextToken();//eat 表达式
+        } else{
+            //否则就是个单纯的标识符
         }
-        //否则就是个单纯的标识符
+        refsymbol(curTok.literal,curTok.position.first);
     } else if (curTok.type == TokenType::LPARENT) {
         getNextToken();//eat (
         parseExpr();
