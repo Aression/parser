@@ -2,14 +2,15 @@
 // Created by Administrator on 2022/5/15 0015.
 //
 
-#include <iostream>
-
 #ifndef PARSER_LEXER_H
 #define PARSER_LEXER_H
 
+#include <iostream>
 #include "token.h"
 #include "reminder.h"
 #include "file_reader.h"
+#include "errkinds.h"
+
 using namespace std;
 
 // Get next char
@@ -23,8 +24,9 @@ class lexer
 private:
     string ident;
     FileReader &reader;
-    Reminder &reminder;
 public:
+    Reminder &reminder;
+
     explicit lexer(FileReader &reader, Reminder &reminder):reader(reader),reminder(reminder){};
 
     // get next token.
@@ -38,7 +40,7 @@ public:
     }
 
     void logerr(const string & msg){
-        reminder.logerr(reader,msg);
+        reminder.report(reader.getLineno(),msg);
     }
 };
 

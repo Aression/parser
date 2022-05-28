@@ -4,13 +4,14 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/CPPWorkDIR/parser/file_reader.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/file_reader.cpp.obj"
-  "D:/CPPWorkDIR/parser/lexer.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/lexer.cpp.obj"
-  "D:/CPPWorkDIR/parser/main.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/main.cpp.obj"
-  "D:/CPPWorkDIR/parser/parser.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/parser.cpp.obj"
-  "D:/CPPWorkDIR/parser/reminder.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/reminder.cpp.obj"
-  "D:/CPPWorkDIR/parser/symbol_table.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/symbol_table.cpp.obj"
-  "D:/CPPWorkDIR/parser/token.cpp" "D:/CPPWorkDIR/parser/cmake-build-debug/CMakeFiles/parser.dir/token.cpp.obj"
+  "E:/GithubRepo/5.17/parser/errkinds.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/errkinds.cpp.obj"
+  "E:/GithubRepo/5.17/parser/file_reader.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/file_reader.cpp.obj"
+  "E:/GithubRepo/5.17/parser/lexer.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/lexer.cpp.obj"
+  "E:/GithubRepo/5.17/parser/main.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/main.cpp.obj"
+  "E:/GithubRepo/5.17/parser/parser.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/parser.cpp.obj"
+  "E:/GithubRepo/5.17/parser/reminder.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/reminder.cpp.obj"
+  "E:/GithubRepo/5.17/parser/symbol_table.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/symbol_table.cpp.obj"
+  "E:/GithubRepo/5.17/parser/token.cpp" "E:/GithubRepo/5.17/parser/cmake-build-debug/CMakeFiles/parser.dir/token.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

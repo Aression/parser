@@ -27,7 +27,7 @@ private:
     int curIndex;
 
     // 记录当前块的嵌套深度
-    int depth;
+    int depth=0;
 
     // get the next token and output its value
     void getNextToken();
@@ -38,8 +38,10 @@ private:
 //    void err(string msg, int errCode);
 public:
 
+    Token curTok = Token(TokenType::UNREGONIZED, "");// 当前token
+
     void logerr(const string & msg){
-        lex.logerr(msg);
+        lex.reminder.report(curTok.position.first,msg);
     }
 
     parser(lexer &lex, ofstream &out);
@@ -205,6 +207,12 @@ public:
     void parseSubConditionPhase();
 
     void parseConstVal();
+
+    void checkSymbolTable();
+
+    void ins();
+
+    void refsymbol(const string &name, const string &type, const int refrow);
 };
 
 #endif //PARSER_PARSER_H

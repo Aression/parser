@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/parser.dir/errkinds.cpp.obj"
   "CMakeFiles/parser.dir/file_reader.cpp.obj"
   "CMakeFiles/parser.dir/lexer.cpp.obj"
   "CMakeFiles/parser.dir/main.cpp.obj"

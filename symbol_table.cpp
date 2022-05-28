@@ -18,17 +18,16 @@ SymbolTable::~SymbolTable() {
 //检查子表中是否有重名变量
 //无，新记录压入栈顶, return 1
 //有，报告错误, return 0
-int SymbolTable::insert(const string& name, const string& type, int blkn, int offset, int dims, int declarRow, vector<int> refRows){
-    node tmpNode = node(name,type,blkn,offset,dims,declarRow,std::move(refRows));
+int SymbolTable::insert(const node& newnode){
     // 如果是空表则直接插入
     if(symbols.empty()){
-        symbols.push_back(tmpNode);
-        return 0;
+        symbols.push_back(newnode);
+        return 1;
     }
     // 检查重名
-    if(checkMultipleName(tmpNode) == 0){
+    if(checkMultipleName(newnode) == 0){
         // 正常，没有重复命名
-        symbols.push_back(tmpNode);
+        symbols.push_back(newnode);
     }else{
         return 0;
     }
@@ -37,8 +36,8 @@ int SymbolTable::insert(const string& name, const string& type, int blkn, int of
 
 //从栈顶到栈底线性检索;实现了最近嵌套作用域原则
 //在当前子表中找到，局部变量, return 1
-//在其他子表中找到，非局部变量, return 2
-//没找到，return 0
+//在其他子表中找到，非局部变量, return 块深度
+//没找到，return -1
 int SymbolTable::islocal(const string& name, const string& type){
     node tmpnode = node(name,type);
     auto blockCheck = blockIndexTabs.back();
@@ -46,7 +45,7 @@ int SymbolTable::islocal(const string& name, const string& type){
         //如果在块外
         if(iter - (symbols.begin()+blockCheck) < 0){
             if(*iter == tmpnode){
-                return 2;
+                return (*iter).blkn;
             }
         }else{
             //块内
@@ -80,8 +79,44 @@ void SymbolTable::reloc(){
 
 void SymbolTable::check() {
     printf("[INFO]checking symbol table..\n");
-    for(auto i : symbols){
-        printf("index=%d, name=%s, type=%s, blkn=%d, offset=%d, dims=%d, declarrow=%d",i,);
+    for (int i = 0; i < symbols.size(); ++i) {
+        for (int j = 0; j < symbols[i].blkn; ++j) {
+            printf("\t");
+        }
+        printf("index=%d, name=%s, type=%s, blkn=%d, declarRow=%d\n",i,symbols[i].name.c_str(),symbols[i].type.c_str(),symbols[i].blkn,symbols[i].declarRow);
+    }
+    printf("-------------------------------\n");
+}
+
+void SymbolTable::ref(const string &name, const string &type, const int refrow) {
+    for(auto & symbol : symbols){
+        if(symbol==node(name,type)){
+            symbol.refRows.push_back(refrow);
+        }
     }
 }
 
+//void SymbolTable::refsymbol(const string& name, const string& type, const int refrow){
+//    // 如果块深度为0则为全局变量，否则为局部变量。
+//    node tmpnode = node(name,type);
+//    auto blockCheck = blockIndexTabs.back();
+//    for(auto iter = symbols.begin();iter!=symbols.end();iter++){
+//        //如果在块外
+//        if(iter - (symbols.begin()+blockCheck) < 0){
+//            if(*iter == tmpnode){
+//                if ((*iter).blkn == 0){
+//                    //如果是全局变量，允许引用
+//                    (*iter).refRows.push_back(refrow);
+//                }else{
+//                    //否则报错，不能引用其他块内的局部变量
+//                    continue;
+//                }
+//            }
+//        }else{
+//            //块内
+//            if(*iter == tmpnode){
+//                (*iter).refRows.push_back(refrow);
+//            }
+//        }
+//    }
+//}

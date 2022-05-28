@@ -5,34 +5,10 @@
 #include "symbol_table.h"
 
 
-void test_symbol_table(){
-    SymbolTable table;
-    table.insert("a","char",0,0,1,1,vector<int>());
-    table.insert("b","char",0,1,1,1,vector<int>());
-    printf("variable b char islocal=%d\n",table.islocal("b","char"));
-
-    table.loc();
-    table.insert("a","char",0,0,1,1,vector<int>());
-    table.insert("b","char",0,1,1,1,vector<int>());
-    printf("variable b char islocal=%d\n",table.islocal("b","char"));
-    table.reloc();
-
-    table.loc();
-    table.insert("d","char",0,1,1,1,vector<int>());
-    printf("variable d char islocal=%d\n",table.islocal("d","char"));
-    printf("variable b char islocal=%d\n",table.islocal("b","char"));
-    table.reloc();
-
-    printf("variable b char islocal=%d\n",table.islocal("b","char"));
-}
-
-
-
-
 int main(int argc, char const *argv[])
 {
-    ifstream fin(R"(D:\CPPWorkDIR\parser\testfile\testfile.txt)");
-    ofstream fout(R"(D:\CPPWorkDIR\parser\testfile\output.txt)");
+    ifstream fin(R"(E:\GithubRepo\5.17\parser\testfile\testfile.txt)");
+    ofstream fout(R"(E:\GithubRepo\5.17\parser\testfile\output.txt)");
 
     //读取器和错误记录模块
     FileReader reader(fin);

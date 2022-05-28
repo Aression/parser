@@ -69,7 +69,10 @@ struct node{
     int blkn=-1; // 块的嵌套深度
     int offset=-1; // 变量的目标地址偏移量
 
-    int dims=-1;// 维数
+    int dims=-1;// 维数, -1表示没有维度，1-2表示1-2维
+
+    int params=-1;// 参数数目, -1表示不是函数定义，0-n表示若干个参数
+    vector<string> paramTypes;// 参数类型列表
 
     int declarRow=-1;// 声明行
     vector<int> refRows;// 引用行
@@ -130,7 +133,7 @@ public:
     //检查子表中是否有重名变量
     //无，新记录压入栈顶
     //有，报告错误
-    int insert(const string& name, const string& type, int blkn, int offset, int dims, int declarRow, vector<int> refRows);
+    int insert(const node& newnode);
 
     //从栈顶到栈底线性检索
     //在当前子表中找到，局部变量
@@ -146,6 +149,9 @@ public:
     //用块索引表顶端元素的值恢复栈顶指针top，完成重定位操作。（pop 直到 *top==curitem）
     //有效地清除刚刚被编译完的块在栈式符号表中的所有记录。
     void reloc();
+
+    //引用符号
+    void ref(const string &name, const string &type, int refrow);
 };
 
 #endif //PARSER_SYMBOL_TABLE_H

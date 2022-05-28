@@ -9,7 +9,3 @@ void Reminder::report(unsigned int line, const string &msg) {
 
 Reminder::Reminder(ostream &error_stream) : err(error_stream) {
 }
-
-void Reminder::logerr(const FileReader & reader, const string & msg){
-    report(reader.getLineno(), msg);
-}

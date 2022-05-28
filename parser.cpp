@@ -3,9 +3,36 @@
 //
 #include "parser.h"
 
-static Token curTok = Token(TokenType::UNREGONIZED, "");// 当前token
 Token unregonized = Token(TokenType::UNREGONIZED, "");
 unordered_map<string, bool> has_retval;
+
+node cursymbol("UNDEF","UNDEF");
+static node undefined("UNDEF","UNDEF");
+
+void clearinfo(){
+    cursymbol = node("UNDEF","UNDEF");
+}
+
+void parser::ins(){
+    if(!(cursymbol==undefined)){
+        //测试子表中是否已经存在重名变量
+        if(!table.insert(cursymbol)){
+            logerr(ERR::meaning(errs::b));// 同一作用域内重命名
+        }
+
+    }else{
+        printf("[ERROR] CANNOT INSERT SYMBOL WITHOUT INIT.");
+    }
+}
+
+void parser::refsymbol(const string& name, const string& type, const int refrow){
+    int res = table.islocal(name,type);
+    if(res==1){
+        table.ref(name,type,refrow);
+    }else{
+        logerr(ERR::meaning(errs::c));//引用了未定义的名字
+    }
+}
 
 parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
     while (true) {
@@ -20,7 +47,7 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
     tokNum = tokList.size();//读取到的总token数目
     curIndex = 0;//将当前的读到的token的位置存储到index变量中
     table = SymbolTable();//初始化符号表
-    depth = 0;//顶层（全局）
+    depth = 0;//顶层 (全局)
 }
 
 //void parser::err(string msg, int errCode) {
@@ -63,7 +90,7 @@ void parser::getNextToken() {
 //        err("getNextToken exceed of range",3);
     }
     // 在更新curTok的同时向文件输出流中写入token的信息[exp3-4屏蔽]
-//    out << curTok.get_type() << " " << curTok.literal << endl;
+    out << curTok.get_type() << " " << curTok.literal << endl;
 }
 
 /*处理过程：
@@ -73,8 +100,8 @@ void parser::getNextToken() {
  */
 
 
-void checkSymbolTable(){
-
+void parser::checkSymbolTable(){
+    table.check();
 }
 
 // ＜程序＞ ::= ［＜常量说明＞］［＜变量说明＞］{＜有返回值函数定义＞|＜无返回值函数定义＞} ＜主函数＞
@@ -83,12 +110,13 @@ void parser::parseProgram() {
 
     //常量&变量声明块
     while((curTok.type == TokenType::CONSTTK) ||
-    (curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)
+    ((curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)
     && (seekN(2).type == TokenType::SEMICN || seekN(2).type == TokenType::COMMA ||
-    seekN(2).type == TokenType::LBRACK || seekN(2).type == TokenType::ASSIGN)){
+    seekN(2).type == TokenType::LBRACK || seekN(2).type == TokenType::ASSIGN))){
         //判断是否存在常量说明[将变量压入符号表]
         if (curTok.type == TokenType::CONSTTK) {
             parseConstStmt();
+            checkSymbolTable();
             getNextToken();
         }
         //判断是否存在变量说明
@@ -96,12 +124,14 @@ void parser::parseProgram() {
             && (seekN(2).type == TokenType::SEMICN || seekN(2).type == TokenType::COMMA ||
                 seekN(2).type == TokenType::LBRACK || seekN(2).type == TokenType::ASSIGN)) {
             parseVarStmt();
+            checkSymbolTable();
             getNextToken();
         }
     }
 
 
-    //函数定义块
+    // 需要添加递归深度，新建loc等操作。实现在funcdef，voidfuncdef的parse函数里面
+    // 函数定义块
     while (((curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK) &&
             seekN(2).type == TokenType::LPARENT && seekN(1).type != TokenType::MAINTK)
            || (curTok.type == TokenType::VOIDTK && seekN(2).type == TokenType::LPARENT &&
@@ -114,9 +144,13 @@ void parser::parseProgram() {
             parseVoidFuncDef();
             getNextToken();//eat 无返回值函数定义
         }
+        checkSymbolTable();
+        table.reloc();
     }
-
     parseMain();//分析主函数
+    checkSymbolTable();
+    table.reloc();
+
     out << "<程序>" << endl;
 }
 
@@ -163,29 +197,62 @@ void parser::parseConstStmt() {
 //  ＜常量定义＞ ::= int＜标识符＞＝＜整数＞{,＜标识符＞＝＜整数＞}
 //               | char＜标识符＞＝＜字符＞{,＜标识符＞＝＜字符＞}
 void parser::parseConstDef() {
+    clearinfo();
 //    int＜标识符＞＝＜整数＞{,＜标识符＞＝＜整数＞}
     if (curTok.type == TokenType::INTTK) {
         getNextToken();//eat int
+
+        cursymbol.name=curTok.literal;
+        cursymbol.type="Const Integer";
+        cursymbol.blkn=depth;
+        cursymbol.dims=-1;
+        cursymbol.declarRow=curTok.position.first;
+        ins();
+
         getNextToken();//eat 标识符
-//        if(table.insert(curTok.literal,curTok.type,))
         getNextToken();//eat =
         parseInteger();
         while (seekN(1).type == TokenType::COMMA) {
             getNextToken();
             getNextToken();// ,
+
+            cursymbol.name=curTok.literal;
+            cursymbol.type="Const Integer";
+            cursymbol.blkn=depth;
+            cursymbol.dims=-1;
+            cursymbol.declarRow=curTok.position.first;
+            ins();
+
             getNextToken();//eat 标识符
             getNextToken();//eat =
             parseInteger();
         }
+
     }
 //    char＜标识符＞＝＜字符＞{,＜标识符＞＝＜字符＞}
     else if (curTok.type == TokenType::CHARTK) {
         getNextToken();//eat char
+
+        cursymbol.name=curTok.literal;
+        cursymbol.type="Const Char";
+        cursymbol.blkn=depth;
+        cursymbol.dims=-1;
+        cursymbol.declarRow=curTok.position.first;
+        ins();
+
         getNextToken();//eat 标识符
         getNextToken();//eat =
         while (seekN(1).type == TokenType::COMMA) {
             getNextToken();//eat 字符
             getNextToken();//eat ,
+
+            cursymbol.name=curTok.literal;
+            cursymbol.type="Const Char";
+            cursymbol.blkn=depth;
+            cursymbol.dims=-1;
+            cursymbol.declarRow=curTok.position.first;
+            ins();
+
             getNextToken();//eat 标识符
             getNextToken();//eat =
         }
@@ -198,7 +265,7 @@ void parser::parseVarStmt() {
     parseVarDef();
     getNextToken();//当前token为 ;
     while ((seekN(1).type == TokenType::INTTK || seekN(1).type == TokenType::CHARTK) &&
-           seekN(3).type != TokenType::LPARENT) { ;//如果下一个token属于类型标识符{
+           seekN(3).type != TokenType::LPARENT/*区别声明头和变量声明*/) {
         getNextToken();//eat ;
         parseVarDef();
         getNextToken();//当前token为 ;
@@ -219,9 +286,21 @@ void parser::parseConstVal(){
 void parser::parseVarDef() {
     string types[2] = {"<变量定义无初始化>", "<变量定义及初始化>"};
     int type = 0;
+    string vartype;
+    if(curTok.type==INTTK){
+        vartype = "Integer Variable";
+    }else if(curTok.type==CHARTK){
+        vartype = "Char Variable";
+    }
 
     getNextToken();//标识符
 
+    clearinfo();
+    cursymbol.name=curTok.literal;
+    cursymbol.blkn=depth;
+    cursymbol.declarRow=curTok.position.first;
+
+    // 声明部分，这一部分负责插入符号
     if (seekN(1).type == TokenType::LBRACK) {
         getNextToken();//[
         getNextToken();//num
@@ -232,11 +311,28 @@ void parser::parseVarDef() {
             getNextToken();//num
             parseUnsignedInteger();//处理无符号整数
             getNextToken();//]
+            cursymbol.type=vartype + " list2d";
+            cursymbol.dims=2;
+            ins();
+        }else{
+            cursymbol.type=vartype + " list1d";
+            cursymbol.dims=1;
+            ins();
         }
+    }else{
+        cursymbol.type=vartype;
+        cursymbol.dims=-1;
+        ins();
     }
+
     while (seekN(1).type == TokenType::COMMA) {
         getNextToken();//现在是逗号
         getNextToken();//现在是标识符
+
+        cursymbol.name=curTok.literal;
+        cursymbol.blkn=depth;
+        cursymbol.declarRow=curTok.position.first;
+
         if (seekN(1).type == TokenType::LBRACK) {
             getNextToken();//[
             getNextToken();//num
@@ -247,6 +343,13 @@ void parser::parseVarDef() {
                 getNextToken();//num
                 parseUnsignedInteger();//处理无符号整数
                 getNextToken();//]
+                cursymbol.type=vartype + " list2d";
+                cursymbol.dims=2;
+                ins();
+            }else{
+                cursymbol.type=vartype + " list1d";
+                cursymbol.dims=1;
+                ins();
             }
         }
 
@@ -295,9 +398,9 @@ void parser::parseVarDef() {
         else{
             getNextToken();//常量
             parseConstVal();
-
         }
     }else if(seekN(1).type==TokenType::SEMICN){
+        //普通的变量声明，没有初始化
         type = 0;
     }
     out << types[type] << endl;
@@ -307,7 +410,17 @@ void parser::parseVarDef() {
 // ＜声明头部＞ ::= int＜标识符＞
 //              |char＜标识符＞
 void parser::parseDeclHeader() {
+    clearinfo();
+    if(curTok.type==TokenType::INTTK){
+        cursymbol.type = "Function With Integer Return Value";
+    }else if(curTok.type==TokenType::CHARTK){
+        cursymbol.type="Function With Char Return Value";
+    }
     getNextToken();//eat int/char
+    cursymbol.name=curTok.literal;
+    cursymbol.blkn=depth;
+    cursymbol.declarRow=curTok.position.first;
+    cursymbol.dims=-1;//暂时不插入，后面还要补充参数表信息
     has_retval.insert(pair<string, bool>(curTok.literal, true));//记录当前函数类型: 有返回值
     out << "<声明头部>" << endl;
 }
@@ -315,6 +428,9 @@ void parser::parseDeclHeader() {
 // ＜有返回值函数定义＞ ::= ＜声明头部＞'('＜参数表＞')' '{'＜复合语句＞'}'
 void parser::parseFuncDef() {
     parseDeclHeader();
+    table.loc();
+    depth++;
+
     getNextToken();//eat 声明头部
     if (seekN(1).type!=TokenType::RPARENT){
         getNextToken();//eat (
@@ -324,17 +440,29 @@ void parser::parseFuncDef() {
         out << "<参数表>" << endl;
         getNextToken();//eat (
     }
-    getNextToken();//eat )
-    getNextToken();//eat {
+    getNextToken();//eat ),现在是{
+    getNextToken();//现在是mulstmt里面第一个token
     parseMulStmt();
     getNextToken();//eat 复合语句
     out << "<有返回值函数定义>" << endl;
+    depth--;
 }
 
 // ＜无返回值函数定义＞ ::= void＜标识符＞'('＜参数表＞')''{'＜复合语句＞'}'
 void parser::parseVoidFuncDef() {
     getNextToken();//eat void
     has_retval.insert(pair<string, bool>(curTok.literal, false));//记录当前函数类型: 无返回值
+
+
+    cursymbol.type="Function Without Return Value";
+    cursymbol.name=curTok.literal;
+    cursymbol.blkn=depth;
+    cursymbol.declarRow=curTok.position.first;
+    cursymbol.dims=-1;
+    ins();
+    table.loc();
+    depth++;
+
     getNextToken();//eat 标识符
     if (seekN(1).type!=TokenType::RPARENT){
         getNextToken();//eat (
@@ -349,6 +477,7 @@ void parser::parseVoidFuncDef() {
     parseMulStmt();
     getNextToken();//eat 复合语句
     out << "<无返回值函数定义>" << endl;
+    depth--;
 }
 
 // ＜有返回值函数调用语句＞ ::= ＜标识符＞'('＜值参数表＞')'
@@ -472,17 +601,16 @@ void parser::parseStmtList() {
 
 //＜复合语句＞ ::= ［＜常量说明＞］［＜变量说明＞］＜语句列＞
 void parser::parseMulStmt() {
-    string str = curTok.literal;
     while( (curTok.type == TokenType::CONSTTK)||(curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)){
         //［＜常量说明＞］
         if (curTok.type == TokenType::CONSTTK) {
             parseConstStmt();
-            getNextToken();//eat 常量说明
+            getNextToken();
         }
         //［＜变量说明＞］
         else if (curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK) {
             parseVarStmt();
-            getNextToken();//eat 变量说明
+            getNextToken();
         }
     }
     parseStmtList();
@@ -659,6 +787,8 @@ void parser::parseReturnStmt() {
 
 //＜主函数＞ ::= void main‘(’‘)’ ‘{’＜复合语句＞‘}’
 void parser::parseMain() {
+    depth++;
+    table.loc();
     getNextToken();//eat void
     getNextToken();//eat main
     getNextToken();//eat (
@@ -667,11 +797,13 @@ void parser::parseMain() {
     parseMulStmt();//处理复合语句
     getNextToken();//eat 复合语句
     out << "<主函数>" << endl;
+    depth--;
 }
 
 //＜参数表＞ ::= ＜类型标识符＞＜标识符＞{,＜类型标识符＞＜标识符＞}
 //            | ＜空＞
 void parser::parseArgList() {
+    //todo：处理参数表，将其引入符号表中函数定义的字段。
     //＜类型标识符＞＜标识符＞{,＜类型标识符＞＜标识符＞}
     if (curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK) {
         getNextToken();//eat 类型标识符

@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-D:/CPPWorkDIR/parser/file_reader.h
+E:/GithubRepo/5.17/parser/errkinds.h
+
+E:/GithubRepo/5.17/parser/file_reader.h
 iostream
 -
 fstream
@@ -14,21 +16,23 @@ fstream
 sstream
 -
 
-D:/CPPWorkDIR/parser/lexer.h
+E:/GithubRepo/5.17/parser/lexer.h
 iostream
 -
 token.h
-D:/CPPWorkDIR/parser/token.h
+E:/GithubRepo/5.17/parser/token.h
 reminder.h
-D:/CPPWorkDIR/parser/reminder.h
+E:/GithubRepo/5.17/parser/reminder.h
 file_reader.h
-D:/CPPWorkDIR/parser/file_reader.h
+E:/GithubRepo/5.17/parser/file_reader.h
+errkinds.h
+E:/GithubRepo/5.17/parser/errkinds.h
 
-D:/CPPWorkDIR/parser/parser.cpp
+E:/GithubRepo/5.17/parser/parser.cpp
 parser.h
-D:/CPPWorkDIR/parser/parser.h
+E:/GithubRepo/5.17/parser/parser.h
 
-D:/CPPWorkDIR/parser/parser.h
+E:/GithubRepo/5.17/parser/parser.h
 iostream
 -
 fstream
@@ -38,23 +42,23 @@ vector
 unordered_map
 -
 lexer.h
-D:/CPPWorkDIR/parser/lexer.h
+E:/GithubRepo/5.17/parser/lexer.h
 symbol_table.h
-D:/CPPWorkDIR/parser/symbol_table.h
+E:/GithubRepo/5.17/parser/symbol_table.h
 
-D:/CPPWorkDIR/parser/reminder.h
+E:/GithubRepo/5.17/parser/reminder.h
 file_reader.h
-D:/CPPWorkDIR/parser/file_reader.h
+E:/GithubRepo/5.17/parser/file_reader.h
 
-D:/CPPWorkDIR/parser/symbol_table.h
+E:/GithubRepo/5.17/parser/symbol_table.h
 token.h
-D:/CPPWorkDIR/parser/token.h
+E:/GithubRepo/5.17/parser/token.h
 bits/stdc++.h
-D:/CPPWorkDIR/parser/bits/stdc++.h
+E:/GithubRepo/5.17/parser/bits/stdc++.h
 
-D:/CPPWorkDIR/parser/token.h
+E:/GithubRepo/5.17/parser/token.h
 iostream
 -
 utility
-D:/CPPWorkDIR/parser/utility
+E:/GithubRepo/5.17/parser/utility
 
