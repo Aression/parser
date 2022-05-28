@@ -124,6 +124,9 @@ public:
     SymbolTable();
     ~SymbolTable();
 
+    // 打印所有已存储符号,测试用
+    void check();
+
     //检查子表中是否有重名变量
     //无，新记录压入栈顶
     //有，报告错误

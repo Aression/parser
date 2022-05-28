@@ -3,9 +3,6 @@
 //
 #include "parser.h"
 
-
-#include "parser.h"
-
 static Token curTok = Token(TokenType::UNREGONIZED, "");// 当前token
 Token unregonized = Token(TokenType::UNREGONIZED, "");
 unordered_map<string, bool> has_retval;
@@ -16,6 +13,8 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
         Token token = lexer.get_token();
         if (token.type == TokenType::EOFTOK) break;
         tokList.emplace_back(token);
+        // 不管这个token是不是可以被识别的token，都把他放进符号列表中。
+        // 在后面的处理过程中，根据实际情况要求，原则上碰见了unrecognized的符号就把这一整句都跳掉
         //out << "valid token position is: line=" << token.position.first << ", col=" << token.position.second << endl;
     }
     tokNum = tokList.size();//读取到的总token数目
@@ -45,6 +44,7 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
 //}
 
 //todo: 需要调整parser对于UNRECOGNIZED型的标识符的处理方式
+//log：不是这个问题，是因为测试用例中return没有被正确的解析出来，所以后面才爆了。
 Token &parser::seekN(int step) {
     if (curIndex + step >= 0 && curIndex + step - 1 < tokNum)
         return tokList[curIndex + step - 1];
@@ -62,8 +62,8 @@ void parser::getNextToken() {
         curTok = unregonized;
 //        err("getNextToken exceed of range",3);
     }
-    // 在更新curTok的同时向文件输出流中写入token的信息
-    out << curTok.get_type() << " " << curTok.literal << endl;
+    // 在更新curTok的同时向文件输出流中写入token的信息[exp3-4屏蔽]
+//    out << curTok.get_type() << " " << curTok.literal << endl;
 }
 
 /*处理过程：
@@ -72,6 +72,10 @@ void parser::getNextToken() {
  * 调用时curtoken必须是switch， 结束时必须是}
  */
 
+
+void checkSymbolTable(){
+
+}
 
 // ＜程序＞ ::= ［＜常量说明＞］［＜变量说明＞］{＜有返回值函数定义＞|＜无返回值函数定义＞} ＜主函数＞
 void parser::parseProgram() {
@@ -82,7 +86,7 @@ void parser::parseProgram() {
     (curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)
     && (seekN(2).type == TokenType::SEMICN || seekN(2).type == TokenType::COMMA ||
     seekN(2).type == TokenType::LBRACK || seekN(2).type == TokenType::ASSIGN)){
-        //判断是否存在常量说明
+        //判断是否存在常量说明[将变量压入符号表]
         if (curTok.type == TokenType::CONSTTK) {
             parseConstStmt();
             getNextToken();

@@ -4,6 +4,7 @@
 CMakeFiles/parser.dir/file_reader.cpp.obj: ../file_reader.cpp
 CMakeFiles/parser.dir/file_reader.cpp.obj: ../file_reader.h
 
+CMakeFiles/parser.dir/lexer.cpp.obj: ../errkinds.h
 CMakeFiles/parser.dir/lexer.cpp.obj: ../file_reader.h
 CMakeFiles/parser.dir/lexer.cpp.obj: ../lexer.cpp
 CMakeFiles/parser.dir/lexer.cpp.obj: ../lexer.h
@@ -15,6 +16,7 @@ CMakeFiles/parser.dir/main.cpp.obj: ../lexer.h
 CMakeFiles/parser.dir/main.cpp.obj: ../main.cpp
 CMakeFiles/parser.dir/main.cpp.obj: ../parser.h
 CMakeFiles/parser.dir/main.cpp.obj: ../reminder.h
+CMakeFiles/parser.dir/main.cpp.obj: ../symbol_table.h
 CMakeFiles/parser.dir/main.cpp.obj: ../token.h
 
 CMakeFiles/parser.dir/parser.cpp.obj: ../file_reader.h
@@ -22,11 +24,16 @@ CMakeFiles/parser.dir/parser.cpp.obj: ../lexer.h
 CMakeFiles/parser.dir/parser.cpp.obj: ../parser.cpp
 CMakeFiles/parser.dir/parser.cpp.obj: ../parser.h
 CMakeFiles/parser.dir/parser.cpp.obj: ../reminder.h
+CMakeFiles/parser.dir/parser.cpp.obj: ../symbol_table.h
 CMakeFiles/parser.dir/parser.cpp.obj: ../token.h
 
 CMakeFiles/parser.dir/reminder.cpp.obj: ../file_reader.h
 CMakeFiles/parser.dir/reminder.cpp.obj: ../reminder.cpp
 CMakeFiles/parser.dir/reminder.cpp.obj: ../reminder.h
+
+CMakeFiles/parser.dir/symbol_table.cpp.obj: ../symbol_table.cpp
+CMakeFiles/parser.dir/symbol_table.cpp.obj: ../symbol_table.h
+CMakeFiles/parser.dir/symbol_table.cpp.obj: ../token.h
 
 CMakeFiles/parser.dir/token.cpp.obj: ../token.cpp
 CMakeFiles/parser.dir/token.cpp.obj: ../token.h

@@ -1,150 +1,68 @@
-1 a
-3 a
-UNREGONIZED #
-CONSTTK const
-INTTK int
-IDENFR const1
-ASSIGN =
-INTCON 1
+2 a
+<无符号整数>
+<整数>
+<无符号整数>
+<整数>
+<常量定义>
+<常量定义>
+<常量说明>
+<变量定义无初始化>
+<变量定义>
+<变量定义无初始化>
+<变量定义>
+<变量说明>
+<声明头部>
+<参数表>
+<因子>
+<项>
+<因子>
+<项>
+<表达式>
+<赋值语句>
 <语句>
-COMMA ,
 <语句>
-IDENFR const2
-ASSIGN =
-MINU -
-INTCON 100
+<因子>
+<项>
+<表达式>
+<值参数表>
+<无返回值函数调用语句>
+<语句>
+<语句>
+<语句>
+<语句>
 <无符号整数>
 <整数>
 <因子>
 <项>
 <表达式>
 <赋值语句>
-SEMICN ;
 <语句>
-CONSTTK const
-<语句>
-CHARTK char
-<语句>
-IDENFR const3
-ASSIGN =
-UNREGONIZED ?
-<因子>
-<项>
-<表达式>
-<赋值语句>
-SEMICN ;
-<语句>
-INTTK int
-<语句>
-IDENFR change1
-SEMICN ;
-CHARTK char
-<因子>
-<项>
-<表达式>
-<值参数表>
-IDENFR change3
-<无返回值函数调用语句>
-SEMICN ;
-<语句>
-INTTK int
-<语句>
-IDENFR gets1
-LPARENT (
-INTTK int
-<因子>
-<项>
-<表达式>
-<值参数表>
-IDENFR var1
-<无返回值函数调用语句>
-COMMA ,
-<语句>
-INTTK int
-<语句>
-IDENFR var2
-RPARENT )
-LBRACE {
-<因子>
-<项>
-<表达式>
-<值参数表>
-IDENFR change1
-<无返回值函数调用语句>
-ASSIGN =
-<语句>
-IDENFR var1
-PLUS +
-IDENFR var2
-<因子>
-<项>
-<表达式>
-<值参数表>
-RETURNTK return
-<无返回值函数调用语句>
-LPARENT (
-<语句>
-IDENFR change1
-RPARENT )
-SEMICN ;
-<因子>
-<项>
-<表达式>
-<值参数表>
-RBRACE }
-<无返回值函数调用语句>
-VOIDTK void
-<语句>
-MAINTK main
-<语句>
-LPARENT (
-<语句>
-RPARENT )
-<语句>
-LBRACE {
-IDENFR change1
-ASSIGN =
-INTCON 10
-<无符号整数>
-<整数>
-<因子>
-<项>
-<表达式>
-<赋值语句>
-SEMICN ;
-<语句>
-PRINTFTK printf
-LPARENT (
-STRCON Hello World
 <字符串>
-RPARENT )
 <写语句>
-SEMICN ;
 <语句>
-PRINTFTK printf
-LPARENT (
-IDENFR gets1
+<无符号整数>
+<整数>
 <因子>
 <项>
 <表达式>
-LPARENT (
+<无符号整数>
+<整数>
+<因子>
+<项>
+<表达式>
+<值参数表>
+<有返回值函数调用语句>
+<因子>
+<项>
+<表达式>
 <写语句>
-INTCON 10
 <语句>
-COMMA ,
-<语句>
-INTCON 20
-<语句>
-RPARENT )
-<语句>
-RPARENT )
-<语句>
-SEMICN ;
 <语句列>
-RBRACE }
 <语句>
 <语句列>
 <复合语句>
-UNREGONIZED EXCEED RANGE
+<有返回值函数定义>
+<语句列>
+<复合语句>
 <主函数>
 <程序>

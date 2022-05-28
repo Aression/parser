@@ -24,19 +24,7 @@ D:/CPPWorkDIR/parser/reminder.h
 file_reader.h
 D:/CPPWorkDIR/parser/file_reader.h
 
-D:/CPPWorkDIR/parser/main.cpp
-bits/stdc++.h
--
-file_reader.h
-D:/CPPWorkDIR/parser/file_reader.h
-lexer.h
-D:/CPPWorkDIR/parser/lexer.h
-parser.h
-D:/CPPWorkDIR/parser/parser.h
-
 D:/CPPWorkDIR/parser/parser.cpp
-parser.h
-D:/CPPWorkDIR/parser/parser.h
 parser.h
 D:/CPPWorkDIR/parser/parser.h
 
@@ -51,10 +39,18 @@ unordered_map
 -
 lexer.h
 D:/CPPWorkDIR/parser/lexer.h
+symbol_table.h
+D:/CPPWorkDIR/parser/symbol_table.h
 
 D:/CPPWorkDIR/parser/reminder.h
 file_reader.h
 D:/CPPWorkDIR/parser/file_reader.h
+
+D:/CPPWorkDIR/parser/symbol_table.h
+token.h
+D:/CPPWorkDIR/parser/token.h
+bits/stdc++.h
+D:/CPPWorkDIR/parser/bits/stdc++.h
 
 D:/CPPWorkDIR/parser/token.h
 iostream

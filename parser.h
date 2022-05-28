@@ -2,16 +2,16 @@
 // Created by Administrator on 2022/5/15 0015.
 //
 
+#ifndef PARSER_PARSER_H
+#define PARSER_PARSER_H
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <unordered_map>
-
-#ifndef PARSER_PARSER_H
-#define PARSER_PARSER_H
-
 #include "lexer.h"
 #include "symbol_table.h"
+
 using namespace std;
 
 class parser

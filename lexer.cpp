@@ -2,6 +2,7 @@
 // Created by Administrator on 2022/5/15 0015.
 //
 #include "lexer.h"
+#include "errkinds.h"
 #include <algorithm>
 
 // unrecognized token
@@ -145,7 +146,7 @@ Token &lexer::get_token(){
         getnext;
         //字符串中间有引号的情况不考虑
         if(strnormal==0){
-            logerr("a");//非法字符串
+            logerr(meaning(errs::a));//非法字符串
             token = Token(TokenType::UNREGONIZED, str);
             token.normalToken=false;
         }else{
@@ -167,7 +168,7 @@ Token &lexer::get_token(){
             count++;
         }
         if(normalchar==0 || count > 1){
-            logerr("a");//非法字符
+            logerr(meaning(errs::a));//非法字符
             token = Token(TokenType::UNREGONIZED, str);
             token.normalToken=false;
         }else if(count==1){//正常的
@@ -246,7 +247,7 @@ Token &lexer::get_token(){
         } else {
             getnext;
             token = Token(TokenType::UNREGONIZED, "!");
-            logerr("a");//非法符号
+            logerr(meaning(errs::a));//非法符号
             token.position=position;
             token.normalToken=false;
             return token;
@@ -297,7 +298,7 @@ Token &lexer::get_token(){
         token.position=position;
         return token;
     }
-    logerr("a");//未定义的字符
+    logerr(meaning(errs::a));//未定义的字符
     std::string literal;
     literal+=last_char;
     token = Token(TokenType::UNREGONIZED,literal);

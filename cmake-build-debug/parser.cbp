@@ -80,6 +80,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="D:/CPPWorkDIR/parser/errkinds.h">
+			<Option target="parser"/>
+		</Unit>
 		<Unit filename="D:/CPPWorkDIR/parser/file_reader.cpp">
 			<Option target="parser"/>
 		</Unit>

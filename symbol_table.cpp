@@ -78,3 +78,10 @@ void SymbolTable::reloc(){
     blockIndexTabs.pop_back();
 }
 
+void SymbolTable::check() {
+    printf("[INFO]checking symbol table..\n");
+    for(auto i : symbols){
+        printf("index=%d, name=%s, type=%s, blkn=%d, offset=%d, dims=%d, declarrow=%d",i,);
+    }
+}
+
