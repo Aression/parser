@@ -131,17 +131,19 @@ Token &lexer::get_token(){
     // 判断字符串是否合法: 十进制编码为32,33,35-126的ASCII字符
     if (last_char == '\"') {
         std::string str;
-        int strnormal=1;
+        int strnormal=1, strcount=0;
         while ((last_char = reader.get_char()) != '\"') {
             if(!(last_char == 32 || last_char==33 || (last_char>=35 && last_char<=126))){
                 strnormal=0;
             }
+            strcount++;
             str += last_char;
         }
         getnext;
         //字符串中间有引号的情况不考虑
-        if(strnormal==0){
-            logerr(ERR::meaning(errs::a));//非法字符串
+        if(strnormal==0 || strcount==0){
+            //有非法字符或者为空字符串均为非法情况
+            logerr(ERR::meaning(errs::a));
             token = Token(TokenType::UNREGONIZED, str);
             token.normalToken=false;
         }else{
@@ -162,11 +164,11 @@ Token &lexer::get_token(){
             str += last_char;
             count++;
         }
-        if(normalchar==0 || count > 1){
+        if(normalchar==0 || count != 1){
             logerr(ERR::meaning(errs::a));//非法字符
-            token = Token(TokenType::UNREGONIZED, str);
+            token = Token(TokenType::CHARCON, str);
             token.normalToken=false;
-        }else if(count==1){//正常的
+        }else {//正常的
             token = Token(TokenType::CHARCON, str);
         }
         getnext;

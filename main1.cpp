@@ -8,7 +8,7 @@
 int main(int argc, char const *argv[])
 {
     ifstream fin(R"(testfile.txt)");
-    ofstream fout(R"(output.txt)");
+    ofstream fout(R"(error.txt)");
 
     //读取器和错误记录模块
     FileReader reader(fin);

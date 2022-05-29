@@ -101,7 +101,7 @@ void parser::getNextToken() {
 //        err("getNextToken exceed of range",3);
     }
     // 在更新curTok的同时向文件输出流中写入token的信息[exp3-4屏蔽]
-////    out << curTok.get_type() << " " << curTok.literal << endl;
+//    out << curTok.get_type() << " " << curTok.literal << endl;
 }
 
 /*处理过程：
@@ -370,6 +370,10 @@ void parser::parseVarDef() {
                 cursymbol.dims=1;
                 ins();
             }
+        }else{
+            cursymbol.type=vartype;
+            cursymbol.dims=-1;
+            ins();
         }
     }
 
@@ -519,13 +523,20 @@ void parser::parseFuncDef() {
     }else{
 //        out << "<参数表>" << endl;
 //        getNextToken();//eat (
+        cursymbol.params=0;
+        ins();//处理完毕，插入定义好的函数
+        table.loc();
+        depth++;
     }
 
     parseRPARENT();// )
     getNextToken();// {
     getNextToken();//现在是mulstmt里面第一个token
-    parseMulStmt(returntype);
-    getNextToken();//eat 复合语句
+
+    if(!parseMulStmt(returntype)){
+        //非空的复合语句
+        getNextToken();//eat 复合语句
+    }
 //    out << "<有返回值函数定义>" << endl;
     depth--;
 }
@@ -558,8 +569,10 @@ void parser::parseVoidFuncDef() {
     parseRPARENT();// )
     getNextToken();// {
     getNextToken();//现在是mulstmt里面第一个token
-    parseMulStmt("void");
-    getNextToken();//eat 复合语句
+    if(!parseMulStmt("void")){
+        //非空的复合语句
+        getNextToken();//eat 复合语句
+    }
 //    out << "<无返回值函数定义>" << endl;
     depth--;
 }
@@ -583,7 +596,9 @@ void parser::parseFuncCall() {
 
         parseRPARENT();//eat 值参数表
     }else{
-        out<<"<值参数表>"<<endl;
+//        out<<"<值参数表>"<<endl;
+        //参数表为空，直接引用即可
+        reffunc(name,params,row);
         parseRPARENT();//eat (
     }
 //    out << "<有返回值函数调用语句>" << endl;
@@ -607,7 +622,7 @@ void parser::parseVoidFuncCall() {
 
         parseRPARENT();//eat 值参数表
     }else{
-        out<<"<值参数表>"<<endl;
+//        out<<"<值参数表>"<<endl;
         parseRPARENT();//eat (
     }
 //    out << "<无返回值函数调用语句>" << endl;
@@ -636,7 +651,6 @@ void parser::parseRPARENT(){
 }
 
 void parser::parseRBRACK(){
-    //todo 检验右中括号
     if(seekN(1).type == TokenType::RBRACK){
         getNextToken();//eat )
     }else{
@@ -659,7 +673,7 @@ void parser::parseRBRACK(){
 int parser::parseStmt(const string &returntype) {
     //parsestmt返回int标识读取到了啥语句
 
-    // 1: return stmt
+    // 1: return stmt; 2: empty stmt
     // -1: unrecognized stmt
     int stmttype=-1;
 
@@ -677,8 +691,11 @@ int parser::parseStmt(const string &returntype) {
     //语句列
     } else if (curTok.type == TokenType::LBRACE) {
         getNextToken();//eat {
-        parseStmtList(returntype);
-        getNextToken();//eat 语句列
+        if(!parseStmtList(returntype)){
+            getNextToken();//eat 语句列
+        }//else pass
+        // 如果语句列为空则不能getnext,不然就乱了
+
     //有\无返回值函数调用
     } else if (curTok.type == TokenType::IDENFR) {
         //有返回值函数
@@ -709,6 +726,7 @@ int parser::parseStmt(const string &returntype) {
         parseSEMICN();
     //空语句（只有一个分号）
     } else if (curTok.type == TokenType::SEMICN){
+        stmttype=2;
 //        out << "<空>" << endl;
     //情况语句，switch
     } else if (curTok.type == TokenType::SWITCHTK){
@@ -721,9 +739,11 @@ int parser::parseStmt(const string &returntype) {
 }
 
 //＜语句列＞ ::= ｛＜语句＞｝
-void parser::parseStmtList(const string & returntype) {
-    bool havereturn= false;
+bool parser::parseStmtList(const string & returntype) {
+    bool havereturn= false, isempty = true;
+    //语句列可以为空
     if (curTok.type != TokenType::RBRACE) {
+        isempty=false;
         while (seekN(1).type != TokenType::RBRACE&&curIndex<tokNum) {
 
             if(parseStmt(returntype)==1){
@@ -739,10 +759,13 @@ void parser::parseStmtList(const string & returntype) {
         logerr(ERR::meaning(errs::h));
     }
 //    out << "<语句列>" << endl;
+    return isempty;
 }
 
 //＜复合语句＞ ::= ［＜常量说明＞］［＜变量说明＞］＜语句列＞
-void parser::parseMulStmt(const string &returntype) {
+bool parser::parseMulStmt(const string &returntype) {
+    //复合语句同样允许为空
+    bool isempty = true;
     while( (curTok.type == TokenType::CONSTTK)||(curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)){
         //［＜常量说明＞］
         if (curTok.type == TokenType::CONSTTK) {
@@ -754,8 +777,10 @@ void parser::parseMulStmt(const string &returntype) {
             parseVarStmt();
             getNextToken();
         }
+        isempty = false;
     }
-    parseStmtList(returntype);
+    bool stmtlist_empty = parseStmtList(returntype);
+    return isempty && stmtlist_empty;
 //    out << "<复合语句>" << endl;
 }
 
@@ -764,6 +789,9 @@ void parser::parseMulStmt(const string &returntype) {
 //              |＜标识符＞'['＜表达式＞']''['＜表达式＞']' =＜表达式＞
 void parser::parseAssignStmt() {
     string symboltype = table.searchSymbol(curTok.literal).type;
+    if(symboltype=="NAN"){//引用了未定义的名字
+        logerr(ERR::meaning(errs::c));
+    }
     if(symboltype == "Const Integer" || symboltype == "Const Char"){
         logerr(ERR::meaning(errs::j));//不能为常量重新赋值
     }
@@ -1156,12 +1184,12 @@ void parser::parseState(const string &returntype) {
             getNextToken();//现在是左边第一个大括号
             if(seekN(1).type == TokenType::CASETK){
                 getNextToken();//现在是case
-                parseConditionTable(returntype,type);
+                parseConditionTable("void",type);
             }
             //todo 匹配每一个switch和default
             if(seekN(1).type == TokenType::DEFAULTTK){
                 getNextToken();//现在是default
-                parseDefault(returntype);
+                parseDefault("void");
                 havedefault=true;
             }
             getNextToken();//现在是右边第二个大括号
@@ -1195,7 +1223,7 @@ void parser::parseSubConditionPhase(const string &returntype, const string &vart
     }
     getNextToken();//现在是冒号
     getNextToken();//现在是语句第一个字符
-    parseStmt(returntype);//现在是语句
+    parseStmt(returntype);
 //    out << "<情况子语句>" << endl;
 }
 

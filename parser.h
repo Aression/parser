@@ -125,12 +125,12 @@ public:
     /**
      * 语句列
      */
-    void parseStmtList(const string &returntype);
+    bool parseStmtList(const string &returntype);
 
     /**
      * 复合语句
      */
-    void parseMulStmt(const string &returntype);
+    bool parseMulStmt(const string &returntype);
 
     /**
      * 赋值语句
