@@ -22,7 +22,6 @@ enum TokenType {
     MAINTK,// main
     IFTK,// if
     ELSETK,// else
-    DOTK,// do
 
     SWITCHTK,// switch
     CASETK,//case

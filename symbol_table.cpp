@@ -34,6 +34,15 @@ int SymbolTable::insert(const node& newnode){
     return 1;
 }
 
+node SymbolTable::searchSymbol(const string &name){
+    for(auto & i : symbols){
+        if(i.name== name){
+            return i;
+        }
+    }
+    return node("NAN","NAN");
+}
+
 //从栈顶到栈底线性检索;实现了最近嵌套作用域原则
 //在当前子表中找到，局部变量, return 1
 //在其他子表中找到，非局部变量, return 块深度
@@ -108,6 +117,22 @@ void SymbolTable::check() {
         }
     }
     printf("-------------------------------\n");
+}
+
+int SymbolTable::refFunc(const string &name, const vector<string>& params, int refrow){
+    for(auto & symbol:symbols){
+        if(symbol.name==name){
+            if(symbol.params!=params.size()){
+                return -1;// d, 调用实参数目和形参数目不匹配
+            }else if(symbol.paramTypes!=params){
+                return -2;//e 函数参数类型不匹配
+            }else{
+                symbol.refRows.push_back(refrow);
+                return 1;//正确对应了
+            }
+        }
+    }
+    return 0;//没找到这个函数
 }
 
 int SymbolTable::ref(const string &name, int refrow) {

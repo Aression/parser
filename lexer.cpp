@@ -78,11 +78,7 @@ Token &lexer::get_token(){
             token = Token(TokenType::ELSETK, ident);
             token.position=position;
             return token;
-        } else if (cmp_str_i(ident,"do")) {
-            token = Token(TokenType::DOTK, ident);
-            token.position=position;
-            return token;
-        } else if (cmp_str_i(ident,"switch")){
+        }else if (cmp_str_i(ident,"switch")){
             token = Token(TokenType::SWITCHTK, ident);
             token.position=position;
             return token;

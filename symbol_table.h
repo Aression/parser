@@ -152,6 +152,10 @@ public:
 
     //引用符号
     int ref(const string &name, int refrow);
+
+    int refFunc(const string &name, const vector<string> &params, int refrow);
+
+    node searchSymbol(const string &name);
 };
 
 #endif //PARSER_SYMBOL_TABLE_H

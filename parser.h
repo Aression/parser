@@ -54,7 +54,7 @@ public:
     /**
      * 无符号整数
      */
-    void parseUnsignedInteger();
+    int parseUnsignedInteger();
 
     /**
      * 整数
@@ -80,7 +80,7 @@ public:
     /**
      * 声明头部
      */
-    void parseDeclHeader();
+    string parseDeclHeader();
 
     /**
      * 变量说明
@@ -120,17 +120,17 @@ public:
     /**
      * 语句
      */
-    void parseStmt();
+    int parseStmt(const string &returntype);
 
     /**
      * 语句列
      */
-    void parseStmtList();
+    void parseStmtList(const string &returntype);
 
     /**
      * 复合语句
      */
-    void parseMulStmt();
+    void parseMulStmt(const string &returntype);
 
     /**
      * 赋值语句
@@ -140,7 +140,7 @@ public:
     /**
      * 条件语句
      */
-    void parseCondStmt();
+    void parseCondStmt(const string &returntype);
 
     /**
      * 条件
@@ -150,12 +150,12 @@ public:
     /**
      * 循环语句
      */
-    void parseLoopStmt();
+    void parseLoopStmt(const string &returntype);
 
     /**
      * 值参数表
      */
-    void parseValArgList();
+    void parseValArgList(vector<string> &params);
 
     /**
      * 读语句
@@ -170,7 +170,7 @@ public:
     /**
      * 返回语句
      */
-    void parseReturnStmt();
+    void parseReturnStmt(const string &returntype);
 
     /**
      * 主函数
@@ -185,34 +185,45 @@ public:
     /**
      * 表达式
      */
-    void parseExpr();
+    string parseExpr();
 
     /**
      * 项
      */
-    void parseItem();
+    string parseItem();
 
     /**
      * 因子
      */
-    void parseFactor();
+    string parseFactor();
 
 
-    void parseState();
+    void parseState(const string &returntype);
 
-    void parseConditionTable();
+    void parseConditionTable(const string &returntype, const string &vartype);
 
-    void parseDefault();
+    void parseDefault(const string &returntype);
 
-    void parseSubConditionPhase();
+    void parseSubConditionPhase(const string &returntype, const string &vartype);
 
-    void parseConstVal();
+    string parseConstVal();
 
     void checkSymbolTable();
 
     void ins();
 
     void refsymbol(const string &name, int refrow);
+
+    void reffunc(const string &name, const vector<string> &params, int refrow);
+
+    void parseSEMICN();
+
+    void parseRPARENT();
+
+    void parseRBRACK();
+
+
+
 };
 
 #endif //PARSER_PARSER_H

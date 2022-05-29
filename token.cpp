@@ -27,8 +27,6 @@ std::string Token::get_type() {
         return "IFTK";
     else if (type == TokenType::ELSETK)
         return "ELSETK";
-    else if (type == TokenType::DOTK)
-        return "DOTK";
     else if (type == TokenType::SWITCHTK)
         return "SWITCHTK";
     else if (type == TokenType::CASETK)
