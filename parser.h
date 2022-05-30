@@ -120,17 +120,17 @@ public:
     /**
      * 语句
      */
-    int parseStmt(const string &returntype);
+    int parseStmt(const string &returntype, bool &havereturn);
 
     /**
      * 语句列
      */
-    bool parseStmtList(const string &returntype);
+    bool parseStmtList(const string &returntype, bool &havereturn);
 
     /**
      * 复合语句
      */
-    bool parseMulStmt(const string &returntype);
+    bool parseMulStmt(const string &returntype, bool &havereturn);
 
     /**
      * 赋值语句
@@ -140,7 +140,7 @@ public:
     /**
      * 条件语句
      */
-    void parseCondStmt(const string &returntype);
+    void parseCondStmt(const string &returntype, bool &havereturn);
 
     /**
      * 条件
@@ -150,7 +150,7 @@ public:
     /**
      * 循环语句
      */
-    void parseLoopStmt(const string &returntype);
+    void parseLoopStmt(const string &returntype, bool &havereturn);
 
     /**
      * 值参数表
@@ -198,13 +198,13 @@ public:
     string parseFactor();
 
 
-    void parseState(const string &returntype);
+    void parseState(const string &returntype, bool &havereturn);
 
-    void parseConditionTable(const string &returntype, const string &vartype);
+    void parseConditionTable(const string &returntype, const string &vartype, bool &havereturn);
 
-    void parseDefault(const string &returntype);
+    void parseDefault(const string &returntype, bool &havereturn);
 
-    void parseSubConditionPhase(const string &returntype, const string &vartype);
+    void parseSubConditionPhase(const string &returntype, const string &vartype, bool &havereturn);
 
     string parseConstVal();
 
@@ -221,7 +221,6 @@ public:
     void parseRPARENT();
 
     void parseRBRACK();
-
 
 
 };

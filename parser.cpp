@@ -62,27 +62,6 @@ parser::parser(lexer &lexer, ofstream &out) : lex(lexer), out(out){
     depth = 0;//顶层 (全局)
 }
 
-//void parser::err(string msg, int errCode) {
-//    /* err code:
-//     * -1: no error
-//     * 1: unsupported token type
-//     * 2: SeekN Exceed Range
-//     * 3: NextToken Exceed Range
-//     */
-//    string errPrefix;
-//    switch(errCode){
-//        case(-1): errPrefix = "Normal Exit";break;
-//        case(1): errPrefix = "Unsupported Token Error";break;
-//        case(2): errPrefix ="SeekN Exceed Range";break;
-//        case(3): errPrefix = "NextToken Exceed Range";break;
-//        default: break;
-//    }
-//    printf("[%s] %s\n",errPrefix.c_str(),msg.c_str());
-//    printf("[ERROR] parse failed at the %dth token: [%s]\n", curIndex, curTok.literal.c_str());
-//    exit(-1);
-//}
-
-
 Token &parser::seekN(int step) {
     if (curIndex + step >= 0 && curIndex + step - 1 < tokNum)
         return tokList[curIndex + step - 1];
@@ -151,12 +130,14 @@ void parser::parseProgram() {
              seekN(2).type == TokenType::LPARENT)) {
             parseFuncDef();
             getNextToken();//eat 有返回值函数定义
+            table.reloc();
         } else if (curTok.type == TokenType::VOIDTK && seekN(2).type == TokenType::LPARENT) {
             parseVoidFuncDef();
             getNextToken();//eat 无返回值函数定义
+            table.reloc();
         }
 //        checkSymbolTable();
-        table.reloc();
+
     }
     parseMain();//分析主函数
 //    checkSymbolTable();
@@ -196,12 +177,12 @@ void parser::parseString() {
 void parser::parseConstStmt() {
     getNextToken();//eat const
     parseConstDef();
-    getNextToken();
+    parseSEMICN();
     while (seekN(1).type == TokenType::CONSTTK) {
         getNextToken();
         getNextToken();//eat "const"
         parseConstDef();
-        getNextToken();
+        parseSEMICN();
     }
 //    out << "<常量说明>" << endl;
 }
@@ -240,7 +221,6 @@ void parser::parseConstDef() {
             getNextToken();//eat =
             parseInteger();
         }
-
     }
 //    char＜标识符＞＝＜字符＞{,＜标识符＞＝＜字符＞}
     else if (curTok.type == TokenType::CHARTK) {
@@ -437,6 +417,7 @@ void parser::parseVarDef() {
                 if(cols!=dy){
                     logerr(ERR::meaning(errs::n));//cols不匹配
                 }
+                cols=0;
                 getNextToken();//现在是内侧对应的}
             }
             if(rows!=dx){
@@ -515,27 +496,30 @@ string parser::parseDeclHeader() {
 void parser::parseFuncDef() {
     string returntype = parseDeclHeader();
 
-    getNextToken();//eat 声明头部
-    if (seekN(1).type!=TokenType::RPARENT){
+    getNextToken();//eat 声明头部, 现在是(
+    if (seekN(1).type!=TokenType::RPARENT&& seekN(1).type!=TokenType::LBRACE){
+        // 非空参数表
         getNextToken();//eat (
         parseArgList();
-//        getNextToken();//eat 参数表
     }else{
 //        out << "<参数表>" << endl;
-//        getNextToken();//eat (
         cursymbol.params=0;
         ins();//处理完毕，插入定义好的函数
         table.loc();
         depth++;
     }
+    parseRPARENT();
 
-    parseRPARENT();// )
     getNextToken();// {
     getNextToken();//现在是mulstmt里面第一个token
 
-    if(!parseMulStmt(returntype)){
+    bool havereturn = false;
+    if(!parseMulStmt(returntype, havereturn)){
         //非空的复合语句
         getNextToken();//eat 复合语句
+    }
+    if(!havereturn && returntype != "void"){
+        logerr(ERR::meaning(errs::h));
     }
 //    out << "<有返回值函数定义>" << endl;
     depth--;
@@ -553,7 +537,7 @@ void parser::parseVoidFuncDef() {
     cursymbol.dims=-1;
 
     getNextToken();//eat 标识符
-    if (seekN(1).type!=TokenType::RPARENT){
+    if (seekN(1).type!=TokenType::RPARENT && seekN(1).type!=TokenType::LBRACE){
         getNextToken();//eat (
         parseArgList();
 //        getNextToken();//eat 参数表
@@ -569,7 +553,8 @@ void parser::parseVoidFuncDef() {
     parseRPARENT();// )
     getNextToken();// {
     getNextToken();//现在是mulstmt里面第一个token
-    if(!parseMulStmt("void")){
+    bool havereturn = false;
+    if(!parseMulStmt("void", havereturn)){
         //非空的复合语句
         getNextToken();//eat 复合语句
     }
@@ -587,7 +572,7 @@ void parser::parseFuncCall() {
     vector<string> params;
 
     getNextToken();//eat 标识符
-    if (seekN(1).type!=TokenType::RPARENT){
+    if (seekN(1).type!=TokenType::RPARENT&& seekN(1).type!=TokenType::LBRACE&& seekN(1).type!=TokenType::SEMICN){
         getNextToken();//eat (
         parseValArgList(params);
 
@@ -613,7 +598,7 @@ void parser::parseVoidFuncCall() {
     vector<string> params;
 
     getNextToken();//eat 标识符
-    if (seekN(1).type!=TokenType::RPARENT){
+    if (seekN(1).type!=TokenType::RPARENT&& seekN(1).type!=TokenType::LBRACE&& seekN(1).type!=TokenType::SEMICN){
         getNextToken();//eat (
         parseValArgList(params);
 
@@ -623,6 +608,8 @@ void parser::parseVoidFuncCall() {
         parseRPARENT();//eat 值参数表
     }else{
 //        out<<"<值参数表>"<<endl;
+        //参数表为空，直接引用即可
+        reffunc(name,params,row);
         parseRPARENT();//eat (
     }
 //    out << "<无返回值函数调用语句>" << endl;
@@ -670,32 +657,32 @@ void parser::parseRBRACK(){
  * |＜返回语句＞;1
  * | '{'＜语句列＞'}'1
  */
-int parser::parseStmt(const string &returntype) {
+int parser::parseStmt(const string &returntype, bool & havereturn) {
     //parsestmt返回int标识读取到了啥语句
 
-    // 1: return stmt; 2: empty stmt
+    // 1: return stmt; 2: empty stmt； 3: stmt list
     // -1: unrecognized stmt
     int stmttype=-1;
 
     //条件语句
     if (curTok.type == TokenType::IFTK) {
-        parseCondStmt(returntype);
+        parseCondStmt(returntype, havereturn);
     //循环语句
     } else if (curTok.type == TokenType::WHILETK || curTok.type == TokenType::FORTK) {
-        parseLoopStmt(returntype);
+        parseLoopStmt(returntype,havereturn);
         //评测机文法规则有问题
         if (seekN(1).type == TokenType::SEMICN){
-            out<<"<语句>"<<endl;
+//            out<<"<语句>"<<endl;
             getNextToken();//eat )
         }
     //语句列
     } else if (curTok.type == TokenType::LBRACE) {
         getNextToken();//eat {
-        if(!parseStmtList(returntype)){
+        if(!parseStmtList(returntype, havereturn)){
             getNextToken();//eat 语句列
         }//else pass
+        stmttype=3;
         // 如果语句列为空则不能getnext,不然就乱了
-
     //有\无返回值函数调用
     } else if (curTok.type == TokenType::IDENFR) {
         //有返回值函数
@@ -721,8 +708,9 @@ int parser::parseStmt(const string &returntype) {
         parseSEMICN();
     //返回语句
     } else if (curTok.type == TokenType::RETURNTK) {
-        parseReturnStmt(returntype);
         stmttype=1;
+        havereturn=true;//外面只处理有没有return
+        parseReturnStmt(returntype);//里面处理return是否有效
         parseSEMICN();
     //空语句（只有一个分号）
     } else if (curTok.type == TokenType::SEMICN){
@@ -730,7 +718,7 @@ int parser::parseStmt(const string &returntype) {
 //        out << "<空>" << endl;
     //情况语句，switch
     } else if (curTok.type == TokenType::SWITCHTK){
-        parseState(returntype);
+        parseState(returntype,havereturn);
     } else{
 //        err("parse <phase> failed!",1);
     }
@@ -739,31 +727,25 @@ int parser::parseStmt(const string &returntype) {
 }
 
 //＜语句列＞ ::= ｛＜语句＞｝
-bool parser::parseStmtList(const string & returntype) {
-    bool havereturn= false, isempty = true;
+//judge return表示是否需要报错没有返回语句
+bool parser::parseStmtList(const string &returntype, bool &havereturn) {
+    bool isempty = true;
     //语句列可以为空
     if (curTok.type != TokenType::RBRACE) {
         isempty=false;
         while (seekN(1).type != TokenType::RBRACE&&curIndex<tokNum) {
-
-            if(parseStmt(returntype)==1){
-                havereturn=true;
-            }
-
+            parseStmt(returntype, havereturn);
             if (seekN(1).type != TokenType::RBRACE&&curIndex<tokNum) {
                 getNextToken();
             }
         }
-    }
-    if(!havereturn && returntype != "void"){
-        logerr(ERR::meaning(errs::h));
     }
 //    out << "<语句列>" << endl;
     return isempty;
 }
 
 //＜复合语句＞ ::= ［＜常量说明＞］［＜变量说明＞］＜语句列＞
-bool parser::parseMulStmt(const string &returntype) {
+bool parser::parseMulStmt(const string &returntype, bool &havereturn) {
     //复合语句同样允许为空
     bool isempty = true;
     while( (curTok.type == TokenType::CONSTTK)||(curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)){
@@ -779,7 +761,7 @@ bool parser::parseMulStmt(const string &returntype) {
         }
         isempty = false;
     }
-    bool stmtlist_empty = parseStmtList(returntype);
+    bool stmtlist_empty = parseStmtList(returntype, havereturn);
     return isempty && stmtlist_empty;
 //    out << "<复合语句>" << endl;
 }
@@ -825,18 +807,18 @@ void parser::parseAssignStmt() {
 }
 
 //＜条件语句＞ ::= if '('＜条件＞')'＜语句＞［else＜语句＞］
-void parser::parseCondStmt(const string &returntype) {
+void parser::parseCondStmt(const string &returntype, bool & havereturn) {
     //条件判断中的条件只能有整形
     getNextToken();//eat if
     getNextToken();//eat (
     parseCond();
     parseRPARENT();//eat 条件
     getNextToken();//eat )
-    parseStmt("void");
+    parseStmt(returntype, havereturn);
     if (seekN(1).type == TokenType::ELSETK) {
         getNextToken();//eat 语句
         getNextToken();//eat else
-        parseStmt("void");
+        parseStmt(returntype, havereturn);
     }
 //    out << "<条件语句>" << endl;
 }
@@ -864,7 +846,7 @@ void parser::parseCond() {
 
 //＜循环语句＞ ::= while '('＜条件＞')'＜语句＞
 //        |for'('＜标识符＞＝＜表达式＞;＜条件＞;＜标识符＞＝＜标识符＞(+|-)＜步长＞')'＜语句＞
-void parser::parseLoopStmt(const string &returntype) {
+void parser::parseLoopStmt(const string &returntype, bool & havereturn) {
 //    while '('＜条件＞')'＜语句＞
     if (curTok.type == TokenType::WHILETK) {
         getNextToken();//eat while
@@ -872,12 +854,13 @@ void parser::parseLoopStmt(const string &returntype) {
         parseCond();
         parseRPARENT();//eat 条件
         getNextToken();//eat )
-        parseStmt("void");
+        parseStmt(returntype, havereturn);
     }
 //    for'('＜标识符＞＝＜表达式＞;＜条件＞;＜标识符＞＝＜标识符＞(+|-)＜步长＞')'＜语句＞
     else if (curTok.type == TokenType::FORTK) {
         getNextToken();//eat for
         getNextToken();//eat (
+        refsymbol(curTok.literal,curTok.position.first);
         getNextToken();//eat 标识符
         getNextToken();//eat =
         parseExpr();
@@ -891,8 +874,9 @@ void parser::parseLoopStmt(const string &returntype) {
         getNextToken();//eat 标识符
         getNextToken();//eat +/-
         parseStep();
-        parseRPARENT();//eat )
-        parseStmt("void");
+        parseRPARENT();//eat step
+        getNextToken();//eat )
+        parseStmt(returntype, havereturn);
     }
 //    out << "<循环语句>" << endl;
 }
@@ -978,10 +962,9 @@ void parser::parseReturnStmt(const string &returntype) {
             getNextToken();//eat (
             parseExpr();
             parseRPARENT();
-        }//else pass, "return;" is legal
+        }//else pass, only "return;" is legal
     }
     else if(returntype == "int" || returntype == "char"){
-
         //必须是 return (expr);
         if (seekN(1).type == TokenType::LPARENT && seekN(2).type == TokenType::RPARENT){
             //return ()
@@ -999,20 +982,15 @@ void parser::parseReturnStmt(const string &returntype) {
                 if(parseExpr() != returntype){
                     logerr(ERR::meaning(errs::h));//return类型不一致
                 }
-            }//else 1
-            parseRPARENT();
+                parseRPARENT();
+            }else{
+                logerr(ERR::meaning(errs::h));//return类型不一致
+                parseRPARENT();
+            }
         }else{
-            //直接结束了，是return; 不符合形式
+            //直接结束了，只有return 不符合形式
             logerr(ERR::meaning(errs::h));
         }
-    }
-
-    //如果返回不为空
-    if (seekN(1).type == TokenType::LPARENT) {
-        getNextToken();// eat return
-        getNextToken();// eat (
-        parseExpr();
-        getNextToken();//eat 表达式
     }
 //    out << "<返回语句>" << endl;
 }
@@ -1026,7 +1004,8 @@ void parser::parseMain() {
     parseRPARENT();//eat (, now )
     getNextToken();//eat )
     getNextToken();//eat {
-    parseMulStmt("void");//处理复合语句
+    bool havereturn = false;
+    parseMulStmt("void", havereturn);//处理复合语句
     getNextToken();//eat 复合语句
 //    out << "<主函数>" << endl;
     depth--;
@@ -1083,6 +1062,7 @@ string parser::parseExpr() {
         getNextToken();//eat 项
         getNextToken();//eat 加法运算符
         parseItem();
+        type = "int";
     }
 //    out << "<表达式>" << endl;
     return type;// 表达式的类型与第一个因子类型一样
@@ -1149,9 +1129,9 @@ string parser::parseFactor() {
             //否则就是个单纯的标识符
             returntype = table.searchSymbol(curTok.literal).type;
 
-            if(returntype == "Integer Variable"){
+            if(returntype == "Const Integer" ||returntype == "Integer Variable" || returntype == "Integer Variable list1d" || returntype == "Integer Variable list2d"){
                 returntype = "int";
-            }else if(returntype == "Char Variable"){
+            }else if(returntype == "Const Char" || returntype == "Char Variable" || returntype == "Char Variable list1d"|| returntype == "Char Variable list2d"){
                 returntype = "char";
             }
 
@@ -1173,7 +1153,7 @@ string parser::parseFactor() {
 }
 
 //switch ‘(’＜表达式＞‘)’ ‘{’＜情况表＞＜缺省＞‘}’
-void parser::parseState(const string &returntype) {
+void parser::parseState(const string &returntype, bool &havereturn) {
     bool havedefault = false;
     if (seekN(1).type == TokenType::LPARENT){
         getNextToken();//现在是第一个左括号
@@ -1184,12 +1164,12 @@ void parser::parseState(const string &returntype) {
             getNextToken();//现在是左边第一个大括号
             if(seekN(1).type == TokenType::CASETK){
                 getNextToken();//现在是case
-                parseConditionTable("void",type);
+                parseConditionTable(returntype,type,havereturn);
             }
             //todo 匹配每一个switch和default
             if(seekN(1).type == TokenType::DEFAULTTK){
                 getNextToken();//现在是default
-                parseDefault("void");
+                parseDefault(returntype,havereturn);
                 havedefault=true;
             }
             getNextToken();//现在是右边第二个大括号
@@ -1207,30 +1187,30 @@ void parser::parseState(const string &returntype) {
 
 }
 
-void parser::parseConditionTable(const string &returntype, const string &vartype) {
-    parseSubConditionPhase(returntype, vartype);
+void parser::parseConditionTable(const string &returntype, const string &vartype, bool & havereturn) {
+    parseSubConditionPhase(returntype, vartype,havereturn);
     while(seekN(1).type == TokenType::CASETK){
         getNextToken();
-        parseSubConditionPhase(returntype, vartype);
+        parseSubConditionPhase(returntype, vartype,havereturn);
     }
 //    out << "<情况表>" << endl;
 }
 
-void parser::parseSubConditionPhase(const string &returntype, const string &vartype) {
+void parser::parseSubConditionPhase(const string &returntype, const string &vartype, bool & havereturn) {
     getNextToken();//现在是常量
     if(parseConstVal() != vartype){
         logerr(ERR::meaning(errs::o));//常量类型不一致
     }
     getNextToken();//现在是冒号
     getNextToken();//现在是语句第一个字符
-    parseStmt(returntype);
+    parseStmt(returntype,havereturn);
 //    out << "<情况子语句>" << endl;
 }
 
-void parser::parseDefault(const string &returntype) {
+void parser::parseDefault(const string &returntype, bool & havereturn) {
     getNextToken();//现在是冒号
     getNextToken();//现在是语句第一个字符
-    parseStmt(returntype);//解析语句
+    parseStmt(returntype,havereturn);//解析语句
 //    out << "<缺省>" << endl;
 }
 

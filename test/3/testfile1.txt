@@ -1,0 +1,80 @@
+void main(){
+
+    int a;
+	int b=5;
+    char otesterr = ')';
+
+    
+    int testiniterr = 'f';
+
+    a = 15;
+    switch(a){
+    case 10: printf(10);
+    case 15: printf(15);
+    default: switch(a){
+        case 20: printf(20);
+        default: printf(a);
+    }
+    };
+
+
+    a = 10;
+    switch(a){
+    case 10: printf(10);
+    case 15: printf(15);
+    default: switch(a){
+        case 20: printf(20);
+        default: printf(a);
+    }
+    };
+
+
+    a = 20;
+    switch(a){
+    case 10: printf(10);
+    case 15: printf(15);
+    default: switch(a){
+        case 20: printf(20);
+        default: printf(a);
+    }
+    };
+
+    a = 157;
+    switch(a){
+    case 10: printf(10);
+    case 15: printf(15);
+    default: switch(a){
+        case 20: printf(20);
+        default: printf(a);
+    }
+    };;
+	
+	a=1000;
+	switch(a){
+	case 5: PRINTF(a);
+	case 10: printf(10);
+	default: switch(a){
+	case 20: printf(20+b);
+	case 100: printf(100+b);
+	default: switch(a){
+	case 1000: printf(a+b);
+	default: printf(a);
+	}
+	}
+	};
+	
+	a=3000;
+	switch(a){
+	case 5: PRINTF(a);
+	case 10: printf(10);
+	default: switch(a){
+	case 20: printf(20+b);
+	case 100: printf(100+b);
+	default: switch(a){
+	case 1000: printf(a+b);
+	default: printf(a);
+	}
+	}
+	};
+    printf(10086)
+}

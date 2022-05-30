@@ -1,0 +1,30 @@
+const int sgLA = -00390;
+
+int tssvz[2][3] = {{1,2,3}, {4,5,6}};
+char tssvzch[2][3] = {{'1','p','3'}, {'4','u','6'}};
+int tessss[2]= {1, 7};
+char tes2tch[3] = {'1', 'i', 'p'};
+int sgaa[400];
+
+int b = -19;
+char c = 'c';
+
+void main(){
+const int tarr = 99;
+const char tch = '/', hhhh='h';
+
+int errlist[11] = {1,2,3,4,5,6,7,8,9,10};;
+
+tssvzch[1][0] = 'k';
+tssvzch[1][++1] = tch;
+tssvzch[1][2] = '-';
+tessss[1] = tarr;
+printf(tssvzch[1][1]);;
+printf(tessss[0]);
+printf(tessss[--1]);
+printf(kk);;;
+;;;
+sgaa[0 + 'a'] = 12;
+printf(sgaa['a']);;
+return;
+}

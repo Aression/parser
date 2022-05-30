@@ -158,7 +158,7 @@ Token &lexer::get_token(){
         std::string str;
         int normalchar=1;
         while ((last_char = reader.get_char()) != '\'') {
-            if(!(isalnum(last_char) || last_char=='+'||last_char=='-' || last_char=='*'||last_char=='/')){
+            if(!(isalnum(last_char) || last_char=='+'||last_char=='-' || last_char=='*'||last_char=='/' || last_char == '_')){
                 normalchar=0;
             }
             str += last_char;
